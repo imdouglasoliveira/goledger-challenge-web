@@ -1,0 +1,39 @@
+# .a8z-OS and AI system files
+.a8z/*
+.antigravity/*
+.claude/*
+.gemini/*
+.codex/*
+.opencode/*
+AGENTS.md
+CLAUDE.md
+.playwright-mcp/*
+
+
+# temp files
+.temp/*
+temp/*
+.backups/*
+backups/*
+logs/*
+*.png
+*.jpg
+*.jpeg
+
+# local runtime files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# build output
+dist/
+build/
+out/
+.next/*
+
+# dependencies
+*/node_modules
+node_modules/*
