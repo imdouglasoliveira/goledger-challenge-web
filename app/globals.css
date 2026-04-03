@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-nf-black: #141414;
+  --color-nf-surface: #181818;
+  --color-nf-card: #232323;
+  --color-nf-red: #E50914;
+  --color-nf-red-hover: #F6121D;
+  --color-nf-gray-100: #E5E5E5;
+  --color-nf-gray-200: #B3B3B3;
+  --color-nf-gray-300: #808080;
+  --color-nf-gray-400: #404040;
+  --color-nf-gray-500: #2A2A2A;
+
+  --animate-fade-in: fade-in 300ms ease-out forwards;
+  --animate-slide-up: slide-up 300ms ease-out forwards;
+  --animate-scale-in: scale-in 200ms ease-out forwards;
+  --animate-shimmer: shimmer 1.5s infinite linear;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slide-up {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+:root {
+  --background: #141414;
+  --foreground: #E5E5E5;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #141414;
+}
+::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #606060;
+}
+
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

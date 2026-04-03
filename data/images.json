@@ -1,0 +1,374 @@
+{
+  "shows": [
+    {
+      "title": "Game of Thrones",
+      "tmdbId": 1399,
+      "tmdbName": "Game of Thrones",
+      "posterPath": "/eDn8XWA0a4U3zOhd1gh7HExdt4Y.jpg",
+      "backdropPath": "/zZqpAXxVSBtxV9qPBcscfXBcL2w.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Friends",
+      "tmdbId": 1668,
+      "tmdbName": "Friends",
+      "posterPath": "/oY3ck2Sdu8qsEWFnuiX2HEfr65k.jpg",
+      "backdropPath": "/ykDYy50mHU52PqYEu4xiFFOw5mw.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Breaking Bad",
+      "tmdbId": 1396,
+      "tmdbName": "Breaking Bad",
+      "posterPath": "/hGwm9Cj3CdbJIqQWNExQqiYmCd4.jpg",
+      "backdropPath": "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "The Sopranos",
+      "tmdbId": 1398,
+      "tmdbName": "The Sopranos",
+      "posterPath": "/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+      "backdropPath": "/lNpkvX2s8LGB0mjGODMT4o6Up7j.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Once Upon a Time",
+      "tmdbId": 39272,
+      "tmdbName": "Once Upon a Time",
+      "posterPath": "/u95scYysMZvBoekSLmMNJjeqXcY.jpg",
+      "backdropPath": "/AmJ72AKL73mvhXyVgkFb8pUbIa9.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Rick and Morty",
+      "tmdbId": 60625,
+      "tmdbName": "Rick and Morty",
+      "posterPath": "/WGRQ8FpjkDTzivQJ43t94bOuY0.jpg",
+      "backdropPath": "/Ao5pBFuWY32cVuh6iYjEjZMEscN.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "La Casa de Papel",
+      "tmdbId": 71446,
+      "tmdbName": "La casa de papel",
+      "posterPath": "/yVUAfbrP5HDJugXraB7KQS0yz6Z.jpg",
+      "backdropPath": "/xGexTKCJDkl12dTW4YCBDXWb1AD.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Arcane",
+      "tmdbId": 94605,
+      "tmdbName": "Arcane",
+      "posterPath": "/m3Tzf6k537PnhOEwaSRNCSxedLS.jpg",
+      "backdropPath": "/q8eejQcg1bAqImEV8jh8RtBD4uH.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "The Big Bang Theory",
+      "tmdbId": 1418,
+      "tmdbName": "The Big Bang Theory",
+      "posterPath": "/an3uTx1P0XgHPylgfPV6W7yxKAo.jpg",
+      "backdropPath": "/sccDflItNho4OiHkzpiDxB2fUFw.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Tom And Jerry",
+      "tmdbId": 47480,
+      "tmdbName": "The Tom and Jerry Show",
+      "posterPath": "/41EWXLXTZO4MLb2BL28mWZuydyq.jpg",
+      "backdropPath": "/utqCOvMmjjMTlXNZz6PHOzRM5QP.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "dewd",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Como vender drogas online rápido",
+      "tmdbId": 88236,
+      "tmdbName": "Como vender drogas online (rápido)",
+      "posterPath": "/5TyQQQngkhZaYljdArGmtBwbc0C.jpg",
+      "backdropPath": "/k5LOQVkVhwq8qybNjwSdWpGghM7.jpg",
+      "confidence": 0.6666666666666666
+    },
+    {
+      "title": "Outlander",
+      "tmdbId": 56570,
+      "tmdbName": "Outlander",
+      "posterPath": "/bxBmfyzK0ARF9hqf2pbFWsddH14.jpg",
+      "backdropPath": "/nf3Vlxm3C9U1aKUUQHmKFZmxPSc.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "The Office",
+      "tmdbId": 2316,
+      "tmdbName": "The Office",
+      "posterPath": "/e7BoS8uUnew9ioS6reqtK9matqy.jpg",
+      "backdropPath": "/mLyW3UTgi2lsMdtueYODcfAB9Ku.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Dexter",
+      "tmdbId": 1405,
+      "tmdbName": "Dexter",
+      "posterPath": "/f1nV5NBIFwfQLw5g8FVrdt90FAy.jpg",
+      "backdropPath": "/aSGSxGMTP893DPMCvMl9AdnEICE.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Stranger Things",
+      "tmdbId": 66732,
+      "tmdbName": "Stranger Things",
+      "posterPath": "/twfKp60THrcOIep9sjHODOOfO8d.jpg",
+      "backdropPath": "/8zbAoryWbtH0DKdev8abFAjdufy.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Supernatural",
+      "tmdbId": 1622,
+      "tmdbName": "Supernatural",
+      "posterPath": "/eK4gEBWNGJoxCD67KFKzaKfSzWU.jpg",
+      "backdropPath": "/ro0tlgnsco4SwbdAgmscLkSlMSL.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Peaky Blinders",
+      "tmdbId": 60574,
+      "tmdbName": "Peaky Blinders: Sangue, Apostas e Navalhas",
+      "posterPath": "/i0uajcHH9yogXMfDHpOXexIukG9.jpg",
+      "backdropPath": "/wiE9doxiLwq3WCGamDIOb2PqBqc.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "Bates Motel",
+      "tmdbId": 46786,
+      "tmdbName": "Motel Bates",
+      "posterPath": "/qlVLk28uGOwVHqxSZlakdRyGMdU.jpg",
+      "backdropPath": "/s3pypVJf05ELPCUA6jSW381nLwm.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "The Mandalorian",
+      "tmdbId": 82856,
+      "tmdbName": "The Mandalorian",
+      "posterPath": "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
+      "backdropPath": "/9zcbqSxdsRMZWHYtyCd1nXPr2xq.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Uma vez Flamengo",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Black Mirror",
+      "tmdbId": 42009,
+      "tmdbName": "Black Mirror",
+      "posterPath": "/aCTL24B8ZuiI2osMwoUI5rqBXoF.jpg",
+      "backdropPath": "/dg3OindVAGZBjlT3xYKqIAdukPL.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "New Item",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "The Crown",
+      "tmdbId": 65494,
+      "tmdbName": "The Crown",
+      "posterPath": "/ehUMAA3qDR5HNor9DB60g72KNQZ.jpg",
+      "backdropPath": "/8VXhcrl5z2I1zEU9X3pkkNrZlD.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Desenho Infantil",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Breaking Badding",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Testando Noovo",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Toasting",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "How I met your mother",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Better Call Saul",
+      "tmdbId": 60059,
+      "tmdbName": "Better Call Saul",
+      "posterPath": "/9IPVuAjodjc2FYluWnNvRdOPsCR.jpg",
+      "backdropPath": "/t15KHp3iNfHVQBNIaqUGW12xQA4.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "El Camino",
+      "tmdbId": 84912,
+      "tmdbName": "El camino",
+      "posterPath": "/dCN8rhQEuQtwp19BAZfquWjlaKU.jpg",
+      "backdropPath": "/i1Db1Imz0pvxnZG8p3aqihZQeWw.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Narcos",
+      "tmdbId": 63351,
+      "tmdbName": "Narcos",
+      "posterPath": "/zzz1KiXWqr8SvqiAb1NmFtnV7Uu.jpg",
+      "backdropPath": "/y9ekzkPFmWSqUU3Kj0wHmYUM8qu.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Arcanjo Renegado",
+      "tmdbId": 99125,
+      "tmdbName": "Arcanjo Renegado",
+      "posterPath": "/p7gsnKeSQsyNYO7QrW5xedd3QTe.jpg",
+      "backdropPath": "/pWOIRfG9auWSXRDL1QIajQ1cyuM.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Olhos que Condenam",
+      "tmdbId": 81355,
+      "tmdbName": "Olhos que Condenam",
+      "posterPath": "/nkJtmjDsRdIzRKNctsMX33W55uJ.jpg",
+      "backdropPath": "/5IIg0PhE764qVuKICgmSAE0Jotx.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "The Wire",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "TESTE",
+      "tmdbId": 2750,
+      "tmdbName": "Testemunha Silenciosa",
+      "posterPath": "/yRwf0yAZvYMfFLMonPusv6F256s.jpg",
+      "backdropPath": "/kFDQweHyB3bxcG2qllKv13npgI6.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "BB",
+      "tmdbId": 1966,
+      "tmdbName": "BBC Horizon",
+      "posterPath": "/uX8pic7asQBdnwMB9QjPvTsn1Dw.jpg",
+      "backdropPath": "/3q7cCjq2cEcYjuOIpL46n11l1Gs.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "BB",
+      "tmdbId": 1966,
+      "tmdbName": "BBC Horizon",
+      "posterPath": "/uX8pic7asQBdnwMB9QjPvTsn1Dw.jpg",
+      "backdropPath": "/3q7cCjq2cEcYjuOIpL46n11l1Gs.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "ADASD",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "123123",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "DASDASD",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "disjointed",
+      "tmdbId": 71308,
+      "tmdbName": "Disjointed",
+      "posterPath": "/gMVzoGfyFNew1RTn4UaMjn3iHCT.jpg",
+      "backdropPath": "/97QIGFwIvY2F9Wno60h11sJE7Qz.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "sdas",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Chaves",
+      "tmdbId": 47,
+      "tmdbName": "Chaves",
+      "posterPath": "/nSpP9aS9LAQd7wwzzOoCAYIluco.jpg",
+      "backdropPath": "/6zzyWTu3p2Diztotbnb0kf128uo.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "asdasdsad",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "alouuu",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    }
+  ],
+  "generatedAt": "2026-03-31T16:51:16.267Z",
+  "tmdbImageBaseUrl": "https://image.tmdb.org/t/p"
+}
