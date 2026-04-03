@@ -118,7 +118,7 @@ export function WatchlistPage() {
   return (
     <div className="min-h-screen pt-24 px-4 md:px-12 pb-24">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Watchlists</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-white">Watchlists</h1>
         <span className="text-sm text-nf-gray-300">{watchlists.length} lista(s)</span>
       </div>
 
@@ -172,7 +172,8 @@ export function WatchlistPage() {
       </Modal>
 
       <button
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 hover:bg-nf-red-hover hover:scale-105 transition-all flex items-center justify-center cursor-pointer"
+        className="fixed bottom-6 right-4 sm:right-6 z-40 w-14 h-14 rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 hover:bg-nf-red-hover active:scale-95 sm:hover:scale-105 transition-all flex items-center justify-center cursor-pointer touch-target-exempt"
+        style={{ marginBottom: 'var(--safe-bottom)' }}
         onClick={() => setFormMode({ type: 'create' })}
         aria-label="Adicionar nova watchlist"
       >

@@ -18,10 +18,12 @@ export function LoadingCard() {
 
 export function LoadingGrid({ count = 6 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {Array.from({ length: count }).map((_, i) => (
-        <LoadingCard key={i} />
-      ))}
+    <div className="min-h-screen pt-24 px-4 md:px-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {Array.from({ length: count }).map((_, i) => (
+          <LoadingCard key={i} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -41,14 +43,14 @@ export function LoadingRow() {
 
 export function LoadingHero() {
   return (
-    <div className="relative w-full h-[60vh] md:h-[70vh] bg-nf-surface animate-pulse">
-      <div className="absolute bottom-[15%] left-0 px-4 md:px-12">
-        <Skeleton className="h-12 w-96 mb-3 bg-nf-card" />
-        <Skeleton className="h-4 w-64 mb-2 bg-nf-card" />
-        <Skeleton className="h-4 w-48 mb-4 bg-nf-card" />
-        <div className="flex gap-3 mt-4">
-          <Skeleton className="h-10 w-28 rounded bg-nf-card" />
-          <Skeleton className="h-10 w-28 rounded bg-nf-card" />
+    <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] bg-nf-surface animate-pulse">
+      <div className="absolute bottom-[10%] sm:bottom-[15%] left-0 px-4 md:px-12 w-full">
+        <Skeleton className="h-8 sm:h-12 w-3/4 max-w-96 mb-3 bg-nf-card" />
+        <Skeleton className="h-4 w-48 max-w-64 mb-2 bg-nf-card" />
+        <Skeleton className="h-4 w-36 max-w-48 mb-4 bg-nf-card hidden sm:block" />
+        <div className="flex gap-2 sm:gap-3 mt-4">
+          <Skeleton className="h-10 w-24 sm:w-28 rounded bg-nf-card" />
+          <Skeleton className="h-10 w-24 sm:w-28 rounded bg-nf-card" />
         </div>
       </div>
     </div>

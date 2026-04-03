@@ -148,17 +148,17 @@ export function EpisodesPage() {
   return (
     <div className="min-h-screen px-4 pb-24 pt-24 md:px-12">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Episodios</h1>
+        <div className="flex items-center justify-between sm:block">
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Episodios</h1>
           <span className="text-sm text-nf-gray-300">{filteredEpisodes.length} episodio(s)</span>
         </div>
 
-        <div className="flex flex-col gap-3 md:flex-row">
+        <div className="flex gap-2 sm:gap-3 md:flex-row">
           <select
             aria-label="Filtrar episodios por show"
             value={filterShow}
             onChange={(event) => handleShowFilter(event.target.value)}
-            className="rounded-md border border-nf-gray-400/30 bg-nf-card px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
+            className="flex-1 md:flex-none rounded-md border border-nf-gray-400/30 bg-nf-card px-3 py-2.5 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
           >
             <option value="">Todos os Shows</option>
             {shows.map((show) => (
@@ -173,7 +173,7 @@ export function EpisodesPage() {
             value={filterSeason}
             onChange={(event) => setFilterSeason(event.target.value)}
             disabled={!filterShow}
-            className="rounded-md border border-nf-gray-400/30 bg-nf-card px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-70"
+            className="flex-1 md:flex-none rounded-md border border-nf-gray-400/30 bg-nf-card px-3 py-2.5 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-70"
           >
             <option value="">Todas as Temporadas</option>
             {filteredSeasons.map((season) => (
@@ -237,7 +237,8 @@ export function EpisodesPage() {
       </Modal>
 
       <button
-        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 transition-all hover:scale-105 hover:bg-nf-red-hover"
+        className="fixed bottom-6 right-4 sm:right-6 z-40 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 transition-all active:scale-95 sm:hover:scale-105 hover:bg-nf-red-hover touch-target-exempt"
+        style={{ marginBottom: 'var(--safe-bottom)' }}
         onClick={() => setFormMode({ type: 'create' })}
         aria-label="Adicionar novo episodio"
       >

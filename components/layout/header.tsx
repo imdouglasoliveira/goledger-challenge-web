@@ -79,16 +79,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
+          <button
             type="button"
-            variant="netflixOutline"
-            className="md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-nf-gray-100 active:bg-white/10 transition-colors md:hidden touch-target-exempt"
             onClick={() => setMobileMenuOpen((value) => !value)}
             aria-expanded={mobileMenuOpen}
             aria-label={mobileMenuOpen ? 'Fechar navegacao' : 'Abrir navegacao'}
           >
-            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </Button>
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
           <Button
             variant="netflix"
             onClick={() => window.dispatchEvent(new CustomEvent(addAction.eventName))}
@@ -101,8 +100,8 @@ export function Header() {
       </div>
 
       {mobileMenuOpen && (
-        <nav className="mt-3 rounded-xl border border-white/10 bg-nf-black/95 p-3 shadow-xl md:hidden">
-          <div className="flex flex-col gap-2 text-sm">
+        <nav className="absolute left-0 right-0 top-full mt-0 border-b border-white/10 bg-nf-black/98 backdrop-blur-md px-4 pb-4 pt-2 shadow-2xl md:hidden animate-[slide-down_200ms_ease-out_forwards]">
+          <div className="flex flex-col gap-1">
             {NAV_LINKS.map((link) => {
               const isActive = pathname === link.href;
 
@@ -112,8 +111,10 @@ export function Header() {
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    'rounded-md px-3 py-2 font-medium transition hover:bg-white/5 hover:text-white',
-                    isActive ? 'bg-white/10 text-white' : 'text-nf-gray-100/80'
+                    'flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors active:bg-white/10',
+                    isActive
+                      ? 'bg-white/10 text-white border-l-2 border-nf-red'
+                      : 'text-nf-gray-100/80 hover:bg-white/5 hover:text-white'
                   )}
                 >
                   {link.label}

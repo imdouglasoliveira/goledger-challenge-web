@@ -8,7 +8,8 @@ interface CarouselRowProps {
   children: React.ReactNode;
 }
 
-const SCROLL_AMOUNT = 800;
+const SCROLL_AMOUNT_DESKTOP = 800;
+const SCROLL_AMOUNT_MOBILE = 320;
 const FADE_WIDTH = 150; // px — width of the fade zone on each edge
 
 export function CarouselRow({ title, children }: CarouselRowProps) {
@@ -87,10 +88,11 @@ export function CarouselRow({ title, children }: CarouselRowProps) {
   const canScrollLeft = offset > 0;
   const canScrollRight = offset < maxOffset - 10;
 
+  const scrollAmount = typeof window !== 'undefined' && window.innerWidth < 640 ? SCROLL_AMOUNT_MOBILE : SCROLL_AMOUNT_DESKTOP;
   const goLeft = () =>
-    setOffset((prev) => Math.max(0, prev - SCROLL_AMOUNT));
+    setOffset((prev) => Math.max(0, prev - scrollAmount));
   const goRight = () =>
-    setOffset((prev) => Math.min(maxOffset, prev + SCROLL_AMOUNT));
+    setOffset((prev) => Math.min(maxOffset, prev + scrollAmount));
 
   // Dynamic mask: fade edges where there's more content
   const maskLeft = canScrollLeft
@@ -112,11 +114,11 @@ export function CarouselRow({ title, children }: CarouselRowProps) {
         {canScrollLeft && (
           <button
             type="button"
-            className="absolute left-0 top-8 z-20 flex h-[calc(100%-6rem)] w-12 cursor-pointer items-center justify-center opacity-0 transition-all duration-500 group-hover/row:opacity-100 md:w-14"
+            className="absolute left-0 top-8 z-20 flex h-[calc(100%-6rem)] w-10 sm:w-12 md:w-14 cursor-pointer items-center justify-center opacity-60 sm:opacity-0 transition-all duration-500 group-hover/row:opacity-100 bg-gradient-to-r from-black/40 to-transparent sm:from-transparent touch-target-exempt"
             onClick={goLeft}
             aria-label={`Rolar carrossel ${title} para a esquerda`}
           >
-            <ChevronLeft className="h-8 w-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-200 hover:scale-125" />
+            <ChevronLeft className="h-6 w-6 sm:h-8 sm:w-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-200 hover:scale-125" />
           </button>
         )}
 
@@ -153,11 +155,11 @@ export function CarouselRow({ title, children }: CarouselRowProps) {
         {canScrollRight && (
           <button
             type="button"
-            className="absolute right-0 top-8 z-20 flex h-[calc(100%-6rem)] w-12 cursor-pointer items-center justify-center opacity-0 transition-all duration-500 group-hover/row:opacity-100 md:w-14"
+            className="absolute right-0 top-8 z-20 flex h-[calc(100%-6rem)] w-10 sm:w-12 md:w-14 cursor-pointer items-center justify-center opacity-60 sm:opacity-0 transition-all duration-500 group-hover/row:opacity-100 bg-gradient-to-l from-black/40 to-transparent sm:from-transparent touch-target-exempt"
             onClick={goRight}
             aria-label={`Rolar carrossel ${title} para a direita`}
           >
-            <ChevronRight className="h-8 w-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-200 hover:scale-125" />
+            <ChevronRight className="h-6 w-6 sm:h-8 sm:w-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-200 hover:scale-125" />
           </button>
         )}
       </div>

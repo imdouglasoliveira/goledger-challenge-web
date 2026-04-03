@@ -49,7 +49,7 @@ export function ShowDetailModal({ show, onClose, onEdit, onDelete }: ShowDetailM
   });
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto px-4 py-8">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:px-4 sm:py-8">
       {/* Backdrop */}
       <button
         type="button"
@@ -60,11 +60,16 @@ export function ShowDetailModal({ show, onClose, onEdit, onDelete }: ShowDetailM
 
       {/* Modal Content */}
       <div
-        className="relative z-[101] w-full max-w-3xl overflow-hidden rounded-lg bg-nf-card shadow-2xl animate-[scale-in_200ms_ease-out_forwards]"
+        className="relative z-[101] w-full max-w-3xl overflow-hidden rounded-t-2xl sm:rounded-lg bg-nf-card shadow-2xl animate-[slide-up_200ms_ease-out_forwards] sm:animate-[scale-in_200ms_ease-out_forwards] max-h-[95dvh] sm:max-h-[90vh] overflow-y-auto overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Drag handle — mobile only */}
+        <div className="flex justify-center pt-2 pb-0 sm:hidden absolute top-0 left-0 right-0 z-20">
+          <div className="h-1 w-10 rounded-full bg-white/30" />
+        </div>
+
         {/* Hero Section — backdrop image or gradient */}
-        <div className="relative h-[300px] md:h-[400px] w-full">
+        <div className="relative h-[220px] sm:h-[300px] md:h-[400px] w-full">
           {show.backdropUrl ? (
             <Image
               src={show.backdropUrl}
@@ -94,22 +99,22 @@ export function ShowDetailModal({ show, onClose, onEdit, onDelete }: ShowDetailM
           </button>
 
           {/* Title + actions over backdrop */}
-          <div className="absolute bottom-6 left-6 right-6 z-10">
+          <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 z-10">
             <h2
-              className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4 leading-tight"
               style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}
             >
               {show.title}
             </h2>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Button
                 variant="netflix"
                 onClick={() => {
                   onClose();
                   onEdit(show);
                 }}
-                className="flex items-center gap-2 px-6 py-2.5 h-auto text-sm rounded font-bold"
+                className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 h-auto text-sm rounded font-bold"
               >
                 <Pencil className="w-4 h-4" />
                 Editar
@@ -120,7 +125,7 @@ export function ShowDetailModal({ show, onClose, onEdit, onDelete }: ShowDetailM
                   onClose();
                   onDelete(show);
                 }}
-                className="flex items-center gap-2 bg-[rgba(109,109,110,0.7)] hover:bg-[rgba(109,109,110,0.4)] px-6 py-2.5 h-auto text-sm rounded font-bold"
+                className="flex items-center gap-1.5 sm:gap-2 bg-[rgba(109,109,110,0.7)] hover:bg-[rgba(109,109,110,0.4)] px-4 sm:px-6 py-2 sm:py-2.5 h-auto text-sm rounded font-bold"
               >
                 <Trash2 className="w-4 h-4" />
                 Excluir
@@ -130,7 +135,7 @@ export function ShowDetailModal({ show, onClose, onEdit, onDelete }: ShowDetailM
         </div>
 
         {/* Info Section */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6 safe-bottom">
           {/* Metadata row */}
           <div className="mb-4 flex items-center gap-3">
             <span className="text-sm font-bold text-green-500">98% Match</span>

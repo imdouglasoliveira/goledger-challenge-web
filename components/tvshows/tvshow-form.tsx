@@ -71,7 +71,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
     <form onSubmit={submitHandler} className="space-y-5">
       {hasHeroImage && (
         <div className="-mx-6 -mt-6 mb-1">
-          <div className="relative h-64 w-full overflow-hidden">
+          <div className="relative h-40 sm:h-64 w-full overflow-hidden">
             <Image
               src={imageUrl}
               alt={defaultValues?.title ?? ''}
@@ -172,7 +172,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
           })}
           placeholder="Descreva o show em pelo menos 10 caracteres"
           rows={3}
-          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-50"
         />
         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
       </div>
@@ -186,7 +186,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
           control={control}
           rules={{ required: 'Selecione uma classificação' }}
           render={({ field }) => (
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2">
               {AGE_OPTIONS.map((opt) => {
                 const selected = field.value === opt.value;
                 return (
@@ -196,10 +196,10 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
                     onClick={() => field.onChange(opt.value)}
                     aria-pressed={selected}
                     className={cn(
-                      'flex h-10 min-w-[3rem] items-center justify-center rounded-md border-2 px-3 text-sm font-bold transition-all duration-150 cursor-pointer',
+                      'flex h-11 sm:h-10 min-w-[3rem] items-center justify-center rounded-md border-2 px-3 text-sm font-bold transition-all duration-150 cursor-pointer touch-target-exempt',
                       selected
-                        ? `${opt.active} scale-110`
-                        : 'bg-transparent border-nf-gray-500 text-nf-gray-300 hover:border-nf-gray-300 hover:text-white'
+                        ? `${opt.active} scale-105 sm:scale-110`
+                        : 'bg-transparent border-nf-gray-500 text-nf-gray-300 hover:border-nf-gray-300 hover:text-white active:border-nf-gray-200'
                     )}
                   >
                     {opt.label}

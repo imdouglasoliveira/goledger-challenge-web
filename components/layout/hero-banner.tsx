@@ -17,7 +17,7 @@ export function HeroBanner({ show, onEdit, onMoreInfo }: HeroBannerProps) {
   const gradientStr = titleToGradient(show.title);
 
   return (
-    <div className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
+    <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden">
       {show.backdropUrl ? (
         <Image
           src={show.backdropUrl}
@@ -52,45 +52,45 @@ export function HeroBanner({ show, onEdit, onMoreInfo }: HeroBannerProps) {
       />
 
       {/* Content */}
-      <div className="absolute bottom-[15%] left-0 px-4 md:px-12 w-full max-w-2xl z-10">
+      <div className="absolute bottom-[10%] sm:bottom-[15%] left-0 px-4 md:px-12 w-full max-w-2xl z-10">
         <h1
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight"
+          className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 sm:mb-4 leading-tight"
           style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.45)' }}
         >
           {show.title}
         </h1>
 
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-green-500 font-bold text-sm" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.6)' }}>98% Match</span>
+        <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-4">
+          <span className="text-green-500 font-bold text-xs sm:text-sm" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.6)' }}>98% Match</span>
           <AgeBadge age={show.recommendedAge} />
-          <span className="text-nf-gray-200 text-sm font-medium" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.6)' }}>Séries</span>
+          <span className="text-nf-gray-200 text-xs sm:text-sm font-medium" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.6)' }}>Séries</span>
         </div>
 
         {show.description && show.description.length > 5 && (
           <p
-            className="text-sm md:text-base text-nf-gray-100 mt-3 mb-6 line-clamp-3 max-w-xl leading-relaxed"
+            className="hidden sm:block text-sm md:text-base text-nf-gray-100 mt-3 mb-6 line-clamp-3 max-w-xl leading-relaxed"
             style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.45)' }}
           >
             {show.description}
           </p>
         )}
 
-        <div className="flex items-center gap-3 mt-4">
+        <div className="flex items-center gap-2 sm:gap-3 mt-3 sm:mt-4">
           <Button
             variant="netflix"
             onClick={() => onEdit(show)}
-            className="flex items-center gap-2 px-7 py-3 h-auto text-base rounded shrink-0 shadow-lg font-bold transition-opacity duration-200 hover:opacity-80"
+            className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-2.5 sm:py-3 h-auto text-sm sm:text-base rounded shrink-0 shadow-lg font-bold transition-opacity duration-200 hover:opacity-80"
           >
-            <Pencil className="w-5 h-5 fill-current" />
+            <Pencil className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
             <span>Editar</span>
           </Button>
 
           <Button
             variant="netflixOutline"
             onClick={() => onMoreInfo(show)}
-            className="flex items-center gap-2 bg-[rgba(109,109,110,0.7)] hover:bg-[rgba(109,109,110,0.4)] px-7 py-3 h-auto text-base rounded shrink-0 font-bold transition-opacity duration-200"
+            className="flex items-center gap-1.5 sm:gap-2 bg-[rgba(109,109,110,0.7)] hover:bg-[rgba(109,109,110,0.4)] px-4 sm:px-7 py-2.5 sm:py-3 h-auto text-sm sm:text-base rounded shrink-0 font-bold transition-opacity duration-200"
           >
-            <Info className="w-5 h-5" />
+            <Info className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Mais Info</span>
           </Button>
         </div>

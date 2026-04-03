@@ -128,14 +128,17 @@ export function SeasonsPage() {
 
   return (
     <div className="min-h-screen pt-24 px-4 md:px-12 pb-24">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Temporadas</h1>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center justify-between sm:block">
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Temporadas</h1>
+          <span className="text-sm text-nf-gray-300 sm:hidden">{filteredSeasons.length}</span>
+        </div>
         <div className="flex items-center gap-3">
           <select
             aria-label="Filtrar temporadas por TV Show"
             value={filterShow}
             onChange={(event) => setFilterShow(event.target.value)}
-            className="rounded-md border border-nf-gray-400/30 bg-nf-card px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
+            className="flex-1 sm:flex-none rounded-md border border-nf-gray-400/30 bg-nf-card px-3 py-2.5 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
           >
             <option value="">Todos os Shows</option>
             {shows.map((show) => (
@@ -144,7 +147,7 @@ export function SeasonsPage() {
               </option>
             ))}
           </select>
-          <span className="text-sm text-nf-gray-300">{filteredSeasons.length} temporada(s)</span>
+          <span className="hidden sm:inline text-sm text-nf-gray-300">{filteredSeasons.length} temporada(s)</span>
         </div>
       </div>
 
@@ -205,7 +208,8 @@ export function SeasonsPage() {
       </Modal>
 
       <button
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 hover:bg-nf-red-hover hover:scale-105 transition-all flex items-center justify-center cursor-pointer"
+        className="fixed bottom-6 right-4 sm:right-6 z-40 w-14 h-14 rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 hover:bg-nf-red-hover active:scale-95 sm:hover:scale-105 transition-all flex items-center justify-center cursor-pointer touch-target-exempt"
+        style={{ marginBottom: 'var(--safe-bottom)' }}
         onClick={() => setFormMode({ type: 'create' })}
         aria-label="Adicionar nova temporada"
       >

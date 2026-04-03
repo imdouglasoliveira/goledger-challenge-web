@@ -111,7 +111,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
           })}
           placeholder="Descreva sua watchlist"
           rows={2}
-          className="w-full rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white resize-y min-h-[60px] max-h-[200px] disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white resize-y min-h-[60px] max-h-[200px] disabled:cursor-not-allowed disabled:opacity-50"
         />
         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
       </div>
@@ -124,7 +124,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
           name="selectedShows"
           control={control}
           render={({ field }) => (
-            <div className="max-h-48 overflow-y-auto space-y-1 rounded-md border border-nf-gray-400 bg-nf-surface p-2">
+            <div className="max-h-52 sm:max-h-48 overflow-y-auto overscroll-contain space-y-0.5 rounded-md border border-nf-gray-400 bg-nf-surface p-1.5 sm:p-2">
               {shows.length === 0 ? (
                 <p className="text-xs text-nf-gray-300 p-2">Nenhum TV Show disponível. Crie um primeiro.</p>
               ) : (
@@ -134,8 +134,8 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
                     <label
                       key={show.title}
                       className={cn(
-                        'flex items-center gap-2 rounded px-2 py-1.5 cursor-pointer transition-colors',
-                        checked ? 'bg-nf-red/10' : 'hover:bg-nf-gray-500/30'
+                        'flex items-center gap-2.5 rounded-md px-2.5 py-2.5 sm:py-1.5 cursor-pointer transition-colors',
+                        checked ? 'bg-nf-red/10 border-l-2 border-nf-red' : 'hover:bg-nf-gray-500/30 border-l-2 border-transparent'
                       )}
                       onClick={(e) => {
                         e.preventDefault();
@@ -149,11 +149,11 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
                         type="checkbox"
                         checked={checked}
                         readOnly
-                        className="h-4 w-4 rounded border-nf-gray-400 text-nf-red focus:ring-nf-red focus:ring-offset-0 bg-nf-gray-500 pointer-events-none"
+                        className="h-4 w-4 rounded border-nf-gray-400 text-nf-red focus:ring-nf-red focus:ring-offset-0 bg-nf-gray-500 pointer-events-none shrink-0"
                       />
-                      <span className="text-sm text-white">{show.title}</span>
+                      <span className="text-sm text-white truncate">{show.title}</span>
                       {show.recommendedAge > 0 && (
-                        <span className="ml-auto text-xs text-nf-gray-300">{show.recommendedAge}+</span>
+                        <span className="ml-auto shrink-0 text-xs text-nf-gray-300">{show.recommendedAge}+</span>
                       )}
                     </label>
                   );

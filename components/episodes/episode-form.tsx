@@ -215,18 +215,41 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>}
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium text-nf-gray-200" htmlFor="releaseDate">
-          Data de Lançamento
-        </label>
-        <Input
-          id="releaseDate"
-          type="date"
-          {...register('releaseDate', {
-            required: 'Data é obrigatória',
-          })}
-        />
-        {errors.releaseDate && <p className="mt-1 text-sm text-red-500">{errors.releaseDate.message}</p>}
+      {/* Date + Rating side by side on desktop */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+        <div>
+          <label className="mb-1 block text-sm font-medium text-nf-gray-200" htmlFor="releaseDate">
+            Data de Lançamento
+          </label>
+          <Input
+            id="releaseDate"
+            type="date"
+            {...register('releaseDate', {
+              required: 'Data é obrigatória',
+            })}
+          />
+          {errors.releaseDate && <p className="mt-1 text-sm text-red-500">{errors.releaseDate.message}</p>}
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium text-nf-gray-200" htmlFor="rating">
+            Avaliação (opcional, 0-10)
+          </label>
+          <Input
+            id="rating"
+            type="number"
+            step="0.1"
+            min="0"
+            max="10"
+            {...register('rating', {
+              setValueAs: (value) => (value ? value.toString() : ''),
+              min: { value: 0, message: 'Avaliação deve ser maior ou igual a 0' },
+              max: { value: 10, message: 'Avaliação deve ser menor ou igual a 10' },
+            })}
+            placeholder="Ex: 8.5"
+          />
+          {errors.rating && <p className="mt-1 text-sm text-red-500">{errors.rating.message}</p>}
+        </div>
       </div>
 
       <div>
@@ -253,29 +276,9 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
           })}
           placeholder="Descreva o episodio em pelo menos 10 caracteres"
           rows={3}
-          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-50"
         />
         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
-      </div>
-
-      <div>
-        <label className="mb-1 block text-sm font-medium text-nf-gray-200" htmlFor="rating">
-          Avaliação (opcional, 0-10)
-        </label>
-        <Input
-          id="rating"
-          type="number"
-          step="0.1"
-          min="0"
-          max="10"
-          {...register('rating', {
-            setValueAs: (value) => (value ? value.toString() : ''),
-            min: { value: 0, message: 'Avaliação deve ser maior ou igual a 0' },
-            max: { value: 10, message: 'Avaliação deve ser menor ou igual a 10' },
-          })}
-          placeholder="Ex: 8.5"
-        />
-        {errors.rating && <p className="mt-1 text-sm text-red-500">{errors.rating.message}</p>}
       </div>
 
       <div className="flex justify-end gap-3 pt-2">
