@@ -29,7 +29,6 @@ Adotar a seguinte stack principal:
 - `React Hook Form`
 - `Zod`
 - `Lucide`
-- `Storybook`
 
 Arquitetura escolhida:
 
@@ -42,7 +41,7 @@ Arquitetura escolhida:
 - esconder credenciais de Basic Auth do navegador
 - manter um backend mais explicito do que simples Route Handlers
 - documentar a API interna de forma clara
-- criar base mais forte para Storybook, QA e evolucao tecnica
+- criar base mais forte para QA e evolucao tecnica
 
 ## 4. Alternativas consideradas
 
@@ -74,7 +73,6 @@ Arquitetura escolhida:
 
 - credenciais ficam protegidas
 - backend e frontend possuem fronteira clara
-- Storybook e design system podem evoluir com menos acoplamento
 - seguranca e observabilidade ficam mais faceis de organizar
 
 ### Negativas e trade-offs
@@ -97,6 +95,5 @@ Arquitetura escolhida:
 1. bootstrap de `Next.js`
 2. bootstrap do `Fastify`
 3. modelagem da API interna via OpenAPI
-4. Storybook e design system base
-5. vertical slice de `tvShows`
-6. extensao para `seasons`, `episodes` e `watchlist`
+4. vertical slice de `tvShows`
+5. extensao para `seasons`, `episodes` e `watchlist`

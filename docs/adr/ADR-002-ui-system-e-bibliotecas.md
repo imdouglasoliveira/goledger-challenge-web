@@ -1,4 +1,4 @@
-# ADR-002 - UI System, Storybook e Bibliotecas Complementares
+# ADR-002 - UI System e Bibliotecas Complementares
 
 - Status: accepted
 - Data: 2026-03-30
@@ -15,31 +15,20 @@ Base visual:
 - `Tailwind CSS`
 - `shadcn/ui`
 - `Lucide`
-- `Storybook`
 - `Radix UI` apenas indiretamente, via ecossistema do shadcn
 
 Bibliotecas complementares aprovadas para uso pontual:
 
-- `Kibo UI`
-- `Magic UI`
-- `React Bits`
-- `Shadcnblocks`
-- `motion`
-- `Sonner`
-- `Vaul`
-- `cmdk`
-- `TanStack Table`
-- `Recharts`
-- `React Day Picker`
-- `Embla Carousel`
+- `Sonner` para toasts e feedback
+- `canvas-confetti` para animacoes de celebracao
+- `motion` para transicoes e animacoes
 
 ## 3. Regras de uso
 
 - `shadcn/ui` continua sendo a base principal
 - usar bibliotecas complementares apenas quando trouxerem ganho real
-- evitar visual “template marketplace”
+- evitar visual "template marketplace"
 - evitar excesso de animacao
-- cada componente reutilizavel importante deve ganhar historia no Storybook
 - implementar `loading`, `skeleton`, `empty state` e `error state` quando houver fetch ou mutacao perceptivel
 - preferir `skeleton` com layout real em vez de spinner de pagina inteira quando a estrutura da tela ja for conhecida
 - evitar codigo duplicado de query keys, api client, schemas, skeletons e wrappers de estado
@@ -70,7 +59,7 @@ Motivo comum:
 
 - mais velocidade de construcao
 - UI mais forte para avaliacao
-- base reutilizavel e documentada
+- base reutilizavel
 
 ### Negativas
 
@@ -81,4 +70,3 @@ Motivo comum:
 
 - preferir composicao e customizacao local
 - manter tokens visuais centralizados
-- Storybook como catalogo oficial do design system aplicado

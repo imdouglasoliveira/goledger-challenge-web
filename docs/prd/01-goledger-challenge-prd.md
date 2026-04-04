@@ -1,7 +1,7 @@
 # PRD - GoLedger Challenge Web
 
 - Data: 2026-03-30
-- Status: Draft
+- Status: Implemented
 - Owner: Projeto GoLedger
 
 ## 1. Problema
@@ -47,7 +47,7 @@ os assets:
 2. Interface deve ser responsiva.
 3. Fluxos criticos devem ter feedback de loading, erro e sucesso.
 4. A API interna deve ser documentada.
-5. Componentes principais devem ser catalogados em Storybook.
+5. Componentes principais devem ser testados com Vitest + React Testing Library.
 
 ## 6. Escopo visual
 

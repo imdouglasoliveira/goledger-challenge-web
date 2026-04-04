@@ -1,47 +1,26 @@
-# 03 - Frontend Next.js e Storybook
+# 03 - Frontend Next.js
 
-## Estrutura sugerida
+## Estrutura do projeto
 
 ```text
-src/
-  app/
-    layout.tsx
-    page.tsx
-    tv-shows/
-    seasons/
-    episodes/
-    watchlists/
-  components/
-    ui/
-    layout/
-    shared/
-  features/
-    tv-shows/
-    seasons/
-    episodes/
-    watchlists/
-  lib/
-    api/
-    query/
-    validation/
-    utils/
-  types/
+app/
+  layout.tsx
+  page.tsx                # Home (TV Shows)
+  seasons/
+  episodes/
+  watchlists/
+components/
+  tvshows/                # TvShowsPage, TvShowForm, TvShowThumbnail, etc.
+  seasons/                # SeasonsPage, SeasonForm, SeasonCard
+  episodes/               # EpisodesPage, EpisodeForm, EpisodeCard
+  watchlist/               # WatchlistPage, WatchlistForm, WatchlistCard
+  ui/                     # Button, Input, Badge, Modal, Skeleton, etc.
+  layout/                 # Header, Sidebar, PageContainer
+lib/
+  api.ts                  # API client (fetch para /api/*)
+  hooks/                  # React Query hooks (use-tvshows, use-seasons, etc.)
+  utils.ts                # Utilitarios (cn, titleToGradient, etc.)
 ```
-
-## Storybook
-
-Storybook sera usado para:
-
-- documentar componentes base
-- validar estados visuais
-- testar variantes antes de integrar em telas
-
-Prioridade de stories:
-
-1. botao, input, select, textarea, card, dialog, badge
-2. tabelas e cards de dominio
-3. formularios de `tvShows`
-4. componentes de feedback e loading
 
 ## Regras de loading e carregamento percebido
 
@@ -73,7 +52,8 @@ Prioridade de stories:
 
 ## Direcao de UX
 
-- shell com sidebar e area principal
-- foco visual em `tvShows`
-- combinacao de cards, tabelas e formularios em drawer/dialog
-- responsivo primeiro para desktop e laptop
+- interface Netflix-inspired com hero banner, carousels e hover cards
+- foco visual em `tvShows` na home
+- combinacao de cards, modais e formularios
+- mobile-first com breakpoints responsivos
+- dark theme exclusivo com paleta Netflix (nf-red, nf-black, nf-surface)
