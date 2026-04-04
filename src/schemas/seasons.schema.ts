@@ -3,7 +3,7 @@ export const seasonProperties = {
   '@assetType': { type: 'string' },
   '@lastUpdated': { type: 'string' },
   number: { type: 'number' },
-  tvShow: { type: 'object' },
+  tvShow: { type: 'object', additionalProperties: true },
   year: { type: 'number' },
 } as const;
 

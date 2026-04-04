@@ -2,12 +2,13 @@ import type { ComponentProps } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { TvShowThumbnail } from '@/components/tvshows/tvshow-thumbnail';
+import type { TvShow } from '@/lib/api';
 
 vi.mock('next/image', () => ({
   default: ({ alt = '', ...props }: ComponentProps<'img'>) => <img alt={alt} {...props} />,
 }));
 
-const mockShow = {
+const mockShow: TvShow = {
   '@key': 'test-key',
   '@assetType': 'tvShows',
   '@lastUpdated': '2026-01-01T00:00:00Z',
@@ -16,7 +17,7 @@ const mockShow = {
   recommendedAge: 14,
 };
 
-const mockShowWithPoster = {
+const mockShowWithPoster: TvShow = {
   ...mockShow,
   posterUrl: 'https://image.tmdb.org/t/p/w500/poster.jpg',
 };

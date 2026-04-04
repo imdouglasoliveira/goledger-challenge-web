@@ -44,8 +44,8 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
     formState: { errors },
   } = useForm<EpisodeFormValues>({
     defaultValues: {
-      tvShowTitle: defaultValues?.season?.tvShow.title ?? '',
-      seasonKey: defaultValues?.season ? `${defaultValues.season.tvShow.title}|${defaultValues.season.number}` : '',
+      tvShowTitle: defaultValues?.season?.tvShow?.title ?? '',
+      seasonKey: defaultValues?.season?.tvShow?.title ? `${defaultValues.season.tvShow.title}|${defaultValues.season.number}` : '',
       episodeNumber: defaultValues?.episodeNumber?.toString() ?? '',
       title: defaultValues?.title ?? '',
       releaseDate: defaultValues?.releaseDate ? defaultValues.releaseDate.split('T')[0] : '',
@@ -63,7 +63,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
   );
 
   const availableShows = useMemo(
-    () => [...new Set(selectableSeasons.map((season) => season.tvShow.title))].sort((a, b) => a.localeCompare(b)),
+    () => [...new Set(selectableSeasons.map((season) => season.tvShow.title!))].sort((a, b) => a.localeCompare(b)),
     [selectableSeasons]
   );
 
@@ -73,7 +73,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
       : selectableSeasons;
 
     return filtered.sort((a, b) => {
-      const byTitle = a.tvShow.title.localeCompare(b.tvShow.title);
+      const byTitle = (a.tvShow.title ?? '').localeCompare(b.tvShow.title ?? '');
       if (byTitle !== 0) return byTitle;
       return a.number - b.number;
     });
@@ -113,7 +113,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         {isEdit ? (
           <>
             <input type="hidden" {...register('tvShowTitle', { required: 'Selecione um TV Show' })} />
-            <Input id="tvShowTitle" value={defaultValues?.season?.tvShow.title ?? ''} disabled readOnly />
+            <Input id="tvShowTitle" value={defaultValues?.season?.tvShow?.title ?? ''} disabled readOnly />
           </>
         ) : (
           <select
@@ -121,7 +121,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
             {...register('tvShowTitle', {
               onChange: () => setValue('seasonKey', ''),
             })}
-            className="w-full rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
+            className="w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-sm text-white focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red"
           >
             <option value="">Todos os Shows</option>
             {availableShows.map((showTitle) => (
@@ -140,22 +140,22 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         {isEdit ? (
           <>
             <input type="hidden" {...register('seasonKey', { required: 'Selecione uma temporada' })} />
-            <Input id="seasonKey" value={`${defaultValues?.season?.tvShow.title} - Temporada ${defaultValues?.season?.number ?? ''}`} disabled readOnly />
+            <Input id="seasonKey" value={`${defaultValues?.season?.tvShow?.title ?? ''} - Temporada ${defaultValues?.season?.number ?? ''}`} disabled readOnly />
           </>
         ) : (
           <select
             id="seasonKey"
             {...register('seasonKey', { required: 'Selecione uma temporada' })}
             className={cn(
-              'w-full rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white'
+              'w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-sm text-white focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red'
             )}
           >
             <option value="">Selecione...</option>
             {availableSeasons.map((season) => {
-              const seasonKey = `${season.tvShow.title}|${season.number}`;
+              const seasonKey = `${season.tvShow.title ?? ''}|${season.number}`;
               return (
                 <option key={seasonKey} value={seasonKey}>
-                  {season.tvShow.title} - Temporada {season.number}
+                  {season.tvShow.title ?? ''} - Temporada {season.number}
                 </option>
               );
             })}
@@ -276,12 +276,12 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
           })}
           placeholder="Descreva o episodio em pelo menos 10 caracteres"
           rows={3}
-          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-200/75 focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red disabled:cursor-not-allowed disabled:opacity-50"
         />
         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
       </div>
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className="mt-2 flex justify-end gap-3 border-t border-nf-gray-400/30 pt-4">
         <Button type="button" variant="netflixOutline" onClick={onCancel}>
           Cancelar
         </Button>

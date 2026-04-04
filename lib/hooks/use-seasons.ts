@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { seasonsApi } from '@/lib/api';
@@ -41,4 +42,16 @@ export function useDeleteSeason() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: SEASONS_KEY }),
     onError: (error) => toast.error('Erro ao excluir temporada', { description: error.message }),
   });
+}
+
+export function useSeasonsForShow(showTitle: string) {
+  const { data, ...rest } = useSeasons(400);
+  const seasons = useMemo(
+    () =>
+      (data?.result ?? [])
+        .filter((s) => s.tvShow?.title === showTitle)
+        .sort((a, b) => a.number - b.number),
+    [data, showTitle]
+  );
+  return { ...rest, seasons };
 }

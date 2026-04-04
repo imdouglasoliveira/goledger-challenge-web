@@ -9,9 +9,9 @@
   --color-nf-card: #232323;
   --color-nf-red: #E50914;
   --color-nf-red-hover: #F6121D;
-  --color-nf-gray-100: #E5E5E5;
-  --color-nf-gray-200: #B3B3B3;
-  --color-nf-gray-300: #808080;
+  --color-nf-gray-100: #ECECEC;
+  --color-nf-gray-200: #CACACA;
+  --color-nf-gray-300: #A0A0A0;
   --color-nf-gray-400: #404040;
   --color-nf-gray-500: #2A2A2A;
 
@@ -41,6 +41,14 @@
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
 
 :root {
   --background: #141414;
@@ -52,7 +60,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
 }

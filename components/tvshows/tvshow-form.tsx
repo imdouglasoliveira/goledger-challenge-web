@@ -70,8 +70,8 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
   return (
     <form onSubmit={submitHandler} className="space-y-5">
       {hasHeroImage && (
-        <div className="-mx-6 -mt-6 mb-1">
-          <div className="relative h-40 sm:h-64 w-full overflow-hidden">
+        <div className="-mx-4 -mt-4 sm:-mx-6 sm:-mt-5 mb-1">
+          <div className="relative h-56 sm:h-80 w-full overflow-hidden">
             <Image
               src={imageUrl}
               alt={defaultValues?.title ?? ''}
@@ -79,15 +79,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
               className={cn('object-cover', isPosterOnly && 'object-top')}
               sizes="(max-width: 768px) 100vw, 500px"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-nf-card from-5% via-nf-card/60 via-40% to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 px-6 pb-4">
-              <h3
-                className="text-xl font-bold text-white leading-tight"
-                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}
-              >
-                {defaultValues?.title}
-              </h3>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-nf-card from-0% via-nf-card/40 via-30% to-transparent" />
             <input type="hidden" {...register('title')} />
           </div>
         </div>
@@ -172,7 +164,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
           })}
           placeholder="Descreva o show em pelo menos 10 caracteres"
           rows={3}
-          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-200/75 focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red disabled:cursor-not-allowed disabled:opacity-50"
         />
         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
       </div>
@@ -212,7 +204,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
         {errors.recommendedAge && <p className="mt-1.5 text-sm text-red-500">{errors.recommendedAge.message}</p>}
       </fieldset>
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className="mt-2 flex justify-end gap-3 border-t border-nf-gray-400/30 pt-4">
         <Button type="button" variant="netflixOutline" onClick={onCancel}>
           Cancelar
         </Button>

@@ -15,7 +15,7 @@ interface SeasonFormValues {
 interface SeasonFormProps {
   defaultValues?: Partial<{
     number: number;
-    tvShow: { '@assetType': 'tvShows'; title: string };
+    tvShow: { '@assetType': 'tvShows'; title?: string };
     year?: number;
   }>;
   shows: TvShow[];
@@ -60,7 +60,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
               value={defaultValues?.tvShow?.title ?? ''}
               disabled
               className={cn(
-                'w-full rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white',
+                'w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-sm text-white focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red',
                 'cursor-not-allowed opacity-70'
               )}
             >
@@ -71,7 +71,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
           <select
             id="tvShowTitle"
             {...register('tvShowTitle', { required: 'Selecione um TV Show' })}
-            className="w-full rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
+            className="w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-sm text-white focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red"
           >
             <option value="">Selecione...</option>
             {shows.map((show) => (
@@ -142,7 +142,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
         {errors.year && <p className="mt-1 text-sm text-red-500">{errors.year.message}</p>}
       </div>
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className="mt-2 flex justify-end gap-3 border-t border-nf-gray-400/30 pt-4">
         <Button type="button" variant="netflixOutline" onClick={onCancel}>
           Cancelar
         </Button>

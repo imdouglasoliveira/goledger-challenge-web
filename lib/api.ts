@@ -1,4 +1,18 @@
 const API_BASE = '/api';
+const MAX_LIST_LIMIT = 100;
+
+function normalizeListLimit(limit: number) {
+  if (!Number.isFinite(limit)) return 20;
+  return Math.max(1, Math.min(MAX_LIST_LIMIT, Math.floor(limit)));
+}
+
+function buildListQuery(limit = 20, bookmark = '') {
+  const params = new URLSearchParams({ limit: String(normalizeListLimit(limit)) });
+  if (bookmark.trim().length > 0) {
+    params.set('bookmark', bookmark);
+  }
+  return `?${params.toString()}`;
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -31,7 +45,7 @@ export interface Season {
   '@assetType': 'seasons';
   '@lastUpdated': string;
   number: number;
-  tvShow: { '@assetType': 'tvShows'; title: string };
+  tvShow: { '@assetType': 'tvShows'; '@key'?: string; title?: string };
   year: number;
 }
 
@@ -39,7 +53,7 @@ export interface Episode {
   '@key': string;
   '@assetType': 'episodes';
   '@lastUpdated': string;
-  season: { '@assetType': 'seasons'; number: number; tvShow: { '@assetType': 'tvShows'; title: string } };
+  season: { '@assetType': 'seasons'; '@key'?: string; number: number; tvShow: { '@assetType': 'tvShows'; '@key'?: string; title?: string } };
   episodeNumber: number;
   title: string;
   releaseDate: string;
@@ -64,7 +78,7 @@ export interface SearchResult<T> {
 // TV Shows API
 export const tvShowsApi = {
   list: (limit = 20, bookmark = '') =>
-    request<SearchResult<TvShow>>(`/tvshows?limit=${limit}&bookmark=${encodeURIComponent(bookmark)}`),
+    request<SearchResult<TvShow>>(`/tvshows${buildListQuery(limit, bookmark)}`),
 
   get: (key: string) =>
     request<TvShow>(`/tvshows/${encodeURIComponent(key)}`),
@@ -82,7 +96,7 @@ export const tvShowsApi = {
 // Seasons API
 export const seasonsApi = {
   list: (limit = 20, bookmark = '') =>
-    request<SearchResult<Season>>(`/seasons?limit=${limit}&bookmark=${encodeURIComponent(bookmark)}`),
+    request<SearchResult<Season>>(`/seasons${buildListQuery(limit, bookmark)}`),
 
   get: (key: string) =>
     request<Season>(`/seasons/${encodeURIComponent(key)}`),
@@ -100,7 +114,7 @@ export const seasonsApi = {
 // Episodes API
 export const episodesApi = {
   list: (limit = 20, bookmark = '') =>
-    request<SearchResult<Episode>>(`/episodes?limit=${limit}&bookmark=${encodeURIComponent(bookmark)}`),
+    request<SearchResult<Episode>>(`/episodes${buildListQuery(limit, bookmark)}`),
 
   get: (key: string) =>
     request<Episode>(`/episodes/${encodeURIComponent(key)}`),
@@ -135,7 +149,7 @@ export const episodesApi = {
 // Watchlist API
 export const watchlistApi = {
   list: (limit = 20, bookmark = '') =>
-    request<SearchResult<Watchlist>>(`/watchlist?limit=${limit}&bookmark=${encodeURIComponent(bookmark)}`),
+    request<SearchResult<Watchlist>>(`/watchlist${buildListQuery(limit, bookmark)}`),
 
   get: (key: string) =>
     request<Watchlist>(`/watchlist/${encodeURIComponent(key)}`),

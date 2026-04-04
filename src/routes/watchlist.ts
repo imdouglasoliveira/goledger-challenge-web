@@ -3,6 +3,7 @@ import { search, readAsset, createAsset, updateAsset, deleteAsset } from '../cli
 import { searchQuerystring, paginationMetadata, errorResponse } from '../schemas/common.schema.js';
 import { watchlistSchema } from '../schemas/watchlist.schema.js';
 import { isJunkWatchlist } from '../services/data-filter.js';
+import { resolveWatchlistRefs } from '../services/reference-resolver.js';
 
 const tvShowRef = {
   type: 'object' as const,
@@ -51,7 +52,9 @@ export async function watchlistRoutes(server: FastifyInstance): Promise<void> {
     try {
       const data = await search({ selector: { '@assetType': 'watchlist' }, limit, bookmark });
       const result = data as { metadata: unknown; result: Record<string, unknown>[] };
-      return { metadata: result.metadata, result: result.result.filter(w => !isJunkWatchlist(w)) };
+      const filtered = result.result.filter(w => !isJunkWatchlist(w));
+      await resolveWatchlistRefs(filtered);
+      return { metadata: result.metadata, result: filtered };
     } catch (err: any) {
       reply.status(err.status || 502);
       return { error: err.message, statusCode: err.status || 502 };
@@ -68,7 +71,9 @@ export async function watchlistRoutes(server: FastifyInstance): Promise<void> {
   }, async (request, reply) => {
     const { key } = request.params as { key: string };
     try {
-      return await readAsset({ '@assetType': 'watchlist', '@key': key });
+      const asset = await readAsset({ '@assetType': 'watchlist', '@key': key });
+      await resolveWatchlistRefs([asset as Record<string, unknown>]);
+      return asset;
     } catch (err: any) {
       reply.status(err.status || 502);
       return { error: err.message, statusCode: err.status || 502 };

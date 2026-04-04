@@ -13,7 +13,7 @@ interface EpisodeCardProps {
 export function EpisodeCard({ episode, onEdit, onDelete }: EpisodeCardProps) {
   const formattedDate = new Date(episode.releaseDate).toLocaleDateString('pt-BR');
   const seasonNumber = episode.season?.number ?? '?';
-  const tvShowTitle = episode.season?.tvShow?.title ?? 'Show nao resolvido';
+  const tvShowTitle = episode.season?.tvShow?.title ?? 'Show não resolvido';
 
   return (
     <div className={cn(
@@ -51,7 +51,7 @@ export function EpisodeCard({ episode, onEdit, onDelete }: EpisodeCardProps) {
               e.stopPropagation();
               onDelete(episode);
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-nf-gray-300/60 text-white transition-all duration-150 hover:border-nf-red hover:bg-nf-red/15 hover:text-nf-red hover:scale-110"
+            className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-full border border-nf-gray-300/60 text-white transition-all duration-150 hover:border-nf-red hover:bg-nf-red/15 hover:text-nf-red hover:scale-110 touch-target-exempt"
             aria-label="Excluir episodio"
           >
             <Trash2 className="h-3.5 w-3.5" />

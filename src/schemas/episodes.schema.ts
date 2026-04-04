@@ -2,7 +2,7 @@ export const episodeProperties = {
   '@key': { type: 'string' },
   '@assetType': { type: 'string' },
   '@lastUpdated': { type: 'string' },
-  season: { type: 'object' },
+  season: { type: 'object', additionalProperties: true },
   episodeNumber: { type: 'number' },
   title: { type: 'string' },
   description: { type: 'string' },

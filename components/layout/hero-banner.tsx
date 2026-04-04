@@ -1,23 +1,24 @@
 'use client';
 
-import { Info, Pencil } from 'lucide-react';
+import { Check, Info, Pencil, Plus } from 'lucide-react';
 import Image from 'next/image';
 import type { TvShow } from '@/lib/api';
-import { titleToGradient } from '@/lib/utils';
+import { cn, titleToGradient } from '@/lib/utils';
 import { AgeBadge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 
 interface HeroBannerProps {
   show: TvShow;
   onEdit: (show: TvShow) => void;
   onMoreInfo: (show: TvShow) => void;
+  isInWatchlist?: boolean;
+  onToggleWatchlist?: () => void;
 }
 
-export function HeroBanner({ show, onEdit, onMoreInfo }: HeroBannerProps) {
+export function HeroBanner({ show, onEdit, onMoreInfo, isInWatchlist, onToggleWatchlist }: HeroBannerProps) {
   const gradientStr = titleToGradient(show.title);
 
   return (
-    <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden">
+    <div className="relative w-full h-[48vh] sm:h-[65vh] md:h-[75vh] overflow-hidden">
       {show.backdropUrl ? (
         <Image
           src={show.backdropUrl}
@@ -52,7 +53,7 @@ export function HeroBanner({ show, onEdit, onMoreInfo }: HeroBannerProps) {
       />
 
       {/* Content */}
-      <div className="absolute bottom-[10%] sm:bottom-[15%] left-0 px-4 md:px-12 w-full max-w-2xl z-10">
+      <div className="absolute bottom-[14%] sm:bottom-[15%] left-0 px-4 md:px-12 w-full max-w-2xl z-10">
         <h1
           className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 sm:mb-4 leading-tight"
           style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.45)' }}
@@ -76,23 +77,36 @@ export function HeroBanner({ show, onEdit, onMoreInfo }: HeroBannerProps) {
         )}
 
         <div className="flex items-center gap-2 sm:gap-3 mt-3 sm:mt-4">
-          <Button
-            variant="netflix"
+          <button
             onClick={() => onEdit(show)}
-            className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-2.5 sm:py-3 h-auto text-sm sm:text-base rounded shrink-0 shadow-lg font-bold transition-opacity duration-200 hover:opacity-80"
+            className="flex h-11 items-center gap-2 rounded-full bg-white px-5 sm:px-7 text-sm sm:text-base font-semibold text-nf-black shadow-lg transition-colors hover:bg-white/80"
           >
-            <Pencil className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-            <span>Editar</span>
-          </Button>
+            <Pencil className="h-4 w-4 sm:h-5 sm:w-5" />
+            Editar
+          </button>
 
-          <Button
-            variant="netflixOutline"
+          <button
             onClick={() => onMoreInfo(show)}
-            className="flex items-center gap-1.5 sm:gap-2 bg-[rgba(109,109,110,0.7)] hover:bg-[rgba(109,109,110,0.4)] px-4 sm:px-7 py-2.5 sm:py-3 h-auto text-sm sm:text-base rounded shrink-0 font-bold transition-opacity duration-200"
+            className="flex h-11 items-center gap-2 rounded-full bg-[rgba(109,109,110,0.7)] px-5 sm:px-7 text-sm sm:text-base font-semibold text-white shadow-lg transition-colors hover:bg-[rgba(109,109,110,0.4)]"
           >
-            <Info className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>Mais Info</span>
-          </Button>
+            <Info className="h-4 w-4 sm:h-5 sm:w-5" />
+            Mais Info
+          </button>
+
+          {onToggleWatchlist && (
+            <button
+              onClick={onToggleWatchlist}
+              className={cn(
+                'flex h-11 w-11 items-center justify-center rounded-full border-2 shadow-lg transition-all duration-150 hover:scale-110',
+                isInWatchlist
+                  ? 'border-green-500 bg-green-500/20 text-green-400 hover:bg-green-500/30'
+                  : 'border-nf-gray-100/70 bg-black/40 text-white hover:border-white hover:bg-black/50'
+              )}
+              aria-label={isInWatchlist ? 'Remover da lista' : 'Adicionar à lista'}
+            >
+              {isInWatchlist ? <Check className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+            </button>
+          )}
         </div>
       </div>
     </div>
