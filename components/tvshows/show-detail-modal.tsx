@@ -1,45 +1,43 @@
 'use client';
 
-import { Pencil, Trash2, X } from 'lucide-react';
+import { useState } from 'react';
+import { Check, ChevronLeft, Pencil, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import type { TvShow } from '@/lib/api';
-import { titleToGradient } from '@/lib/utils';
+import type { Season, TvShow } from '@/lib/api';
+import { cn, titleToGradient } from '@/lib/utils';
 import { AgeBadge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Modal } from '@/components/ui/modal';
+import { useSeasonsForShow } from '@/lib/hooks/use-seasons';
+import { useEpisodesForSeason } from '@/lib/hooks/use-episodes';
+import { SeasonListInline } from './season-list-inline';
+import { EpisodeListInline } from './episode-list-inline';
 
 interface ShowDetailModalProps {
   show: TvShow | null;
   onClose: () => void;
   onEdit: (show: TvShow) => void;
   onDelete: (show: TvShow) => void;
+  isInWatchlist?: boolean;
+  onToggleWatchlist?: () => void;
 }
 
-export function ShowDetailModal({ show, onClose, onEdit, onDelete }: ShowDetailModalProps) {
-  const [mounted, setMounted] = useState(false);
+export function ShowDetailModal({
+  show,
+  onClose,
+  onEdit,
+  onDelete,
+  isInWatchlist,
+  onToggleWatchlist,
+}: ShowDetailModalProps) {
+  const [selectedSeason, setSelectedSeason] = useState<Season | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { seasons, isLoading: seasonsLoading } = useSeasonsForShow(show?.title ?? '');
+  const { episodes, isLoading: episodesLoading } = useEpisodesForSeason(
+    show?.title ?? '',
+    selectedSeason?.number
+  );
 
-  useEffect(() => {
-    if (!show) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [show, onClose]);
-
-  if (!mounted || !show || typeof window === 'undefined') return null;
+  if (!show) return null;
 
   const gradientStr = titleToGradient(show.title);
   const updatedAt = new Date(show['@lastUpdated']).toLocaleDateString('pt-BR', {
@@ -48,116 +46,120 @@ export function ShowDetailModal({ show, onClose, onEdit, onDelete }: ShowDetailM
     year: 'numeric',
   });
 
-  return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto px-4 py-8">
-      {/* Backdrop */}
-      <button
-        type="button"
-        className="fixed inset-0 bg-black/70 backdrop-blur-[2px]"
-        onClick={onClose}
-        aria-label="Fechar modal"
-      />
+  function handleClose() {
+    setSelectedSeason(null);
+    onClose();
+  }
 
-      {/* Modal Content */}
-      <div
-        className="relative z-[101] w-full max-w-3xl overflow-hidden rounded-lg bg-nf-card shadow-2xl animate-[scale-in_200ms_ease-out_forwards]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Hero Section — backdrop image or gradient */}
-        <div className="relative h-[300px] md:h-[400px] w-full">
+  return (
+    <Modal open={Boolean(show)} onClose={handleClose} size="full" contentClassName="p-0">
+      <div className="flex min-h-[68vh] flex-col">
+        <div className="relative h-[240px] w-full sm:h-[320px] md:h-[420px]">
           {show.backdropUrl ? (
             <Image
               src={show.backdropUrl}
               alt=""
               fill
               className="object-cover object-top"
-              sizes="(max-width: 768px) 100vw, 768px"
+              sizes="(max-width: 768px) 100vw, 1100px"
               priority
             />
           ) : (
             <div className="absolute inset-0" style={{ backgroundImage: gradientStr }} />
           )}
 
-          {/* Gradient overlays for text legibility */}
-          <div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(20,20,20,1) 0%, rgba(20,20,20,0.6) 40%, transparent 70%)' }}
-          />
+          <div className="absolute inset-0 bg-gradient-to-t from-nf-card via-nf-card/60 to-transparent" />
 
-          {/* Close button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-nf-card/80 text-white transition-colors hover:bg-nf-card"
-            aria-label="Fechar"
-          >
-            <X className="h-5 w-5" />
-          </button>
-
-          {/* Title + actions over backdrop */}
-          <div className="absolute bottom-6 left-6 right-6 z-10">
-            <h2
-              className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
-              style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}
-            >
+          <div className="absolute bottom-5 left-4 right-4 z-10 sm:bottom-7 sm:left-6 sm:right-6 md:left-8 md:right-8">
+            <h2 className="mb-3 text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               {show.title}
             </h2>
-
-            <div className="flex items-center gap-3">
-              <Button
-                variant="netflix"
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
                 onClick={() => {
-                  onClose();
+                  handleClose();
                   onEdit(show);
                 }}
-                className="flex items-center gap-2 px-6 py-2.5 h-auto text-sm rounded font-bold"
+                className="flex h-10 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-nf-black transition-colors hover:bg-white/80"
               >
-                <Pencil className="w-4 h-4" />
+                <Pencil className="h-4 w-4" />
                 Editar
-              </Button>
-              <Button
-                variant="netflixOutline"
+              </button>
+
+              {onToggleWatchlist && (
+                <button
+                  onClick={onToggleWatchlist}
+                  className={cn(
+                    'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-150 hover:scale-110',
+                    isInWatchlist
+                      ? 'border-green-500 bg-green-500/20 text-green-400 hover:bg-green-500/30'
+                      : 'border-nf-gray-100/70 bg-black/40 text-white hover:border-white hover:bg-black/50'
+                  )}
+                  aria-label={isInWatchlist ? 'Remover da lista' : 'Adicionar à lista'}
+                >
+                  {isInWatchlist ? <Check className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                </button>
+              )}
+
+              <button
                 onClick={() => {
-                  onClose();
+                  handleClose();
                   onDelete(show);
                 }}
-                className="flex items-center gap-2 bg-[rgba(109,109,110,0.7)] hover:bg-[rgba(109,109,110,0.4)] px-6 py-2.5 h-auto text-sm rounded font-bold"
+                className="flex h-10 items-center gap-2 rounded-full border border-white/30 bg-black/40 px-4 text-sm font-semibold text-nf-gray-100 shadow-lg backdrop-blur-sm transition-colors hover:border-nf-red hover:text-nf-red hover:bg-nf-red/10"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="h-4 w-4" />
                 Excluir
-              </Button>
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Info Section */}
-        <div className="p-6">
-          {/* Metadata row */}
-          <div className="mb-4 flex items-center gap-3">
-            <span className="text-sm font-bold text-green-500">98% Match</span>
+        <div className="flex flex-1 flex-col gap-4 px-4 pb-5 pt-5 sm:px-6 md:px-8">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-nf-gray-100">
+            <span className="font-bold text-green-400">98% match</span>
             <AgeBadge age={show.recommendedAge} />
-            <span className="text-sm text-nf-gray-200">Séries</span>
+            <span>Série</span>
           </div>
 
-          {/* Description — full, no line-clamp */}
-          {show.description && show.description.length > 5 && (
-            <p className="text-sm leading-relaxed text-nf-gray-100 mb-6">
-              {show.description}
-            </p>
-          )}
+          <p className="max-w-4xl text-sm leading-relaxed text-nf-gray-100 sm:text-base">
+            {show.description?.trim() ? show.description : 'Descrição não informada para este título.'}
+          </p>
 
-          {/* Divider */}
-          <div className="h-px bg-nf-gray-400/30 mb-4" />
+          {/* Drill-down: Temporadas / Episódios */}
+          <div className="mt-2 border-t border-nf-gray-400/30 pt-4">
+            {selectedSeason ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSeason(null)}
+                  className="mb-4 flex items-center gap-1 text-sm font-medium text-nf-gray-100 transition-colors hover:text-white"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Temporada {selectedSeason.number}
+                  {selectedSeason.year ? ` (${selectedSeason.year})` : ''}
+                </button>
+                <EpisodeListInline episodes={episodes} isLoading={episodesLoading} />
+              </>
+            ) : (
+              <>
+                <h3 className="mb-3 text-base font-semibold text-white">Temporadas</h3>
+                <SeasonListInline
+                  seasons={seasons}
+                  isLoading={seasonsLoading}
+                  onSelectSeason={setSelectedSeason}
+                  backdropUrl={show.backdropUrl}
+                  showTitle={show.title}
+                />
+              </>
+            )}
+          </div>
 
-          {/* Extra metadata */}
-          <div className="flex flex-col gap-1.5 text-xs text-nf-gray-200">
-            <p>
-              <span className="text-nf-gray-300">Atualizado em:</span>{' '}
-              <span className="text-nf-gray-100">{updatedAt}</span>
-            </p>
+          <div className="mt-auto border-t border-nf-gray-400/30 pt-3 text-xs text-nf-gray-200">
+            Atualizado em <span className="font-semibold text-nf-gray-100">{updatedAt}</span>
           </div>
         </div>
       </div>
-    </div>,
-    document.body
+    </Modal>
   );
 }

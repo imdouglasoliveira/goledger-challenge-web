@@ -4,7 +4,7 @@ export const watchlistProperties = {
   '@lastUpdated': { type: 'string' },
   title: { type: 'string' },
   description: { type: 'string' },
-  tvShows: { type: 'array', items: { type: 'object' } },
+  tvShows: { type: 'array', items: { type: 'object', additionalProperties: true } },
 } as const;
 
 export const watchlistSchema = {

@@ -2,7 +2,9 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { EpisodeForm } from '@/components/episodes/episode-form';
 
-const seasons = [
+import type { Season } from '@/lib/api';
+
+const seasons: Season[] = [
   {
     '@key': 'seasons:dark:1',
     '@assetType': 'seasons',

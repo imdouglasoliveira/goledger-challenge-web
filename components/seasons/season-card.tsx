@@ -8,16 +8,21 @@ interface SeasonCardProps {
   season: Season;
   onEdit: (season: Season) => void;
   onDelete: (season: Season) => void;
+  onClick?: () => void;
 }
 
-export function SeasonCard({ season, onEdit, onDelete }: SeasonCardProps) {
-  const tvShowTitle = season.tvShow?.title ?? 'Show nao resolvido';
+export function SeasonCard({ season, onEdit, onDelete, onClick }: SeasonCardProps) {
+  const tvShowTitle = season.tvShow?.title ?? 'Show não resolvido';
 
   return (
-    <div className={cn(
-      'group relative rounded-lg bg-nf-card border border-nf-gray-400/20 p-4 transition-all duration-200',
-      'hover:border-nf-gray-300/40 hover:shadow-lg hover:shadow-black/20'
-    )}>
+    <div
+      onClick={onClick}
+      className={cn(
+        'group relative rounded-lg bg-nf-card border border-nf-gray-400/20 p-4 transition-all duration-200',
+        'hover:border-nf-gray-300/40 hover:shadow-lg hover:shadow-black/20',
+        onClick && 'cursor-pointer active:scale-[0.98]'
+      )}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-nf-red/20 text-nf-red">
@@ -33,13 +38,13 @@ export function SeasonCard({ season, onEdit, onDelete }: SeasonCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onEdit(season);
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-nf-gray-300/60 text-white transition-all duration-150 hover:border-white hover:bg-white/15 hover:scale-110"
+            className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-full border border-nf-gray-300/60 text-white transition-all duration-150 hover:border-white hover:bg-white/15 hover:scale-110 touch-target-exempt"
             aria-label="Editar temporada"
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -49,7 +54,7 @@ export function SeasonCard({ season, onEdit, onDelete }: SeasonCardProps) {
               e.stopPropagation();
               onDelete(season);
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-nf-gray-300/60 text-white transition-all duration-150 hover:border-nf-red hover:bg-nf-red/15 hover:text-nf-red hover:scale-110"
+            className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-full border border-nf-gray-300/60 text-white transition-all duration-150 hover:border-nf-red hover:bg-nf-red/15 hover:text-nf-red hover:scale-110 touch-target-exempt"
             aria-label="Excluir temporada"
           >
             <Trash2 className="h-3.5 w-3.5" />

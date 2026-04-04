@@ -19,6 +19,14 @@ logs/*
 *.png
 *.jpg
 *.jpeg
+!public/images/**
+
+# execution artifacts (completed — not needed in repo)
+docs/plans/
+docs/tasks/
+docs/specs/
+docs/progress/
+docs/storybook/
 
 # local runtime files
 .env

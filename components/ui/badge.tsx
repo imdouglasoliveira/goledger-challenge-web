@@ -11,7 +11,7 @@ export function AgeBadge({ age, className }: AgeBadgeProps) {
   return (
     <span 
       className={cn(
-        "inline-flex items-center justify-center border border-nf-gray-300 text-nf-gray-100 text-[10px] uppercase font-bold px-1.5 py-0.5 rounded-sm tracking-widest leading-none",
+        "inline-flex items-center justify-center rounded-sm border border-nf-gray-200 text-[10px] font-bold uppercase leading-none tracking-widest text-white px-1.5 py-0.5",
         className
       )}
     >

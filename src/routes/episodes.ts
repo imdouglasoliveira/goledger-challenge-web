@@ -3,6 +3,7 @@ import { search, readAsset, createAsset, updateAsset, deleteAsset } from '../cli
 import { searchQuerystring, paginationMetadata, errorResponse } from '../schemas/common.schema.js';
 import { episodeSchema } from '../schemas/episodes.schema.js';
 import { isJunkEpisode } from '../services/data-filter.js';
+import { resolveEpisodeRefs } from '../services/reference-resolver.js';
 
 const seasonRef = {
   type: 'object' as const,
@@ -65,7 +66,9 @@ export async function episodesRoutes(server: FastifyInstance): Promise<void> {
     try {
       const data = await search({ selector: { '@assetType': 'episodes' }, limit, bookmark });
       const result = data as { metadata: unknown; result: Record<string, unknown>[] };
-      return { metadata: result.metadata, result: result.result.filter(e => !isJunkEpisode(e)) };
+      const filtered = result.result.filter(e => !isJunkEpisode(e));
+      await resolveEpisodeRefs(filtered);
+      return { metadata: result.metadata, result: filtered };
     } catch (err: any) {
       reply.status(err.status || 502);
       return { error: err.message, statusCode: err.status || 502 };

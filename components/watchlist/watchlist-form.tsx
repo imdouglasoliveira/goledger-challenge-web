@@ -1,16 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Check, Search } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { AgeBadge } from '@/components/ui/badge';
+import { cn, titleToGradient } from '@/lib/utils';
 import type { TvShow, Watchlist } from '@/lib/api';
 
-interface WatchlistFormValues {
-  title: string;
-  description: string;
-  selectedShows: string[];
-}
+const watchlistSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(2, 'Título deve ter no mínimo 2 caracteres')
+    .max(200, 'Título deve ter no máximo 200 caracteres'),
+  description: z
+    .string()
+    .max(2000, 'Descrição deve ter no máximo 2000 caracteres')
+    .default(''),
+  selectedShows: z.array(z.string()).default([]),
+});
+
+type WatchlistFormValues = z.infer<typeof watchlistSchema>;
 
 interface WatchlistFormProps {
   defaultValues?: Partial<Watchlist>;
@@ -22,13 +37,17 @@ interface WatchlistFormProps {
 }
 
 export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoading, isEdit }: WatchlistFormProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     control,
-    formState: { errors },
+    formState: { errors, dirtyFields },
   } = useForm<WatchlistFormValues>({
+    resolver: zodResolver(watchlistSchema),
     defaultValues: {
       title: defaultValues?.title ?? '',
       description: defaultValues?.description ?? '',
@@ -38,7 +57,18 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
 
   const descriptionValue = watch('description') ?? '';
   const selectedShows = watch('selectedShows') ?? [];
+  const titleValue = watch('title') ?? '';
+
+  // Auto-preencher título com nome do primeiro show selecionado (apenas ao criar)
+  const titleWasTouched = dirtyFields.title;
+  if (!isEdit && !titleWasTouched && selectedShows.length > 0 && !titleValue) {
+    setValue('title', selectedShows[0]);
+  }
   const DESC_MAX = 2000;
+
+  const filteredShows = searchQuery.trim()
+    ? shows.filter((s) => s.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    : shows;
 
   const submitHandler = handleSubmit((data) => {
     onSubmit({
@@ -58,12 +88,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
         </label>
         {isEdit ? (
           <>
-            <input type="hidden" {...register('title', {
-              required: 'Título é obrigatório',
-              setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-              minLength: { value: 2, message: 'Título deve ter no mínimo 2 caracteres' },
-              maxLength: { value: 200, message: 'Título deve ter no máximo 200 caracteres' },
-            })} />
+            <input type="hidden" {...register('title')} />
             <Input
               id="title"
               value={defaultValues?.title ?? ''}
@@ -74,12 +99,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
         ) : (
           <Input
             id="title"
-            {...register('title', {
-              required: 'Título é obrigatório',
-              setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-              minLength: { value: 2, message: 'Título deve ter no mínimo 2 caracteres' },
-              maxLength: { value: 200, message: 'Título deve ter no máximo 200 caracteres' },
-            })}
+            {...register('title')}
             placeholder="Ex: Minha Lista, Para Assistir..."
           />
         )}
@@ -105,66 +125,110 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
         </div>
         <textarea
           id="description"
-          {...register('description', {
-            setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-            maxLength: { value: DESC_MAX, message: `Descrição deve ter no máximo ${DESC_MAX} caracteres` },
-          })}
+          {...register('description')}
           placeholder="Descreva sua watchlist"
           rows={2}
-          className="w-full rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white resize-y min-h-[60px] max-h-[200px] disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-200/75 focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red resize-y min-h-[60px] max-h-[200px] disabled:cursor-not-allowed disabled:opacity-50"
         />
         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
       </div>
 
       <div>
         <label className="mb-2 block text-sm font-medium text-nf-gray-200">
-          TV Shows ({selectedShows.length} selecionado(s))
+          TV Shows ({selectedShows.length} selecionado{selectedShows.length !== 1 ? 's' : ''})
         </label>
         <Controller
           name="selectedShows"
           control={control}
           render={({ field }) => (
-            <div className="max-h-48 overflow-y-auto space-y-1 rounded-md border border-nf-gray-400 bg-nf-surface p-2">
-              {shows.length === 0 ? (
-                <p className="text-xs text-nf-gray-300 p-2">Nenhum TV Show disponível. Crie um primeiro.</p>
-              ) : (
-                shows.map((show) => {
-                  const checked = field.value.includes(show.title);
-                  return (
-                    <label
-                      key={show.title}
-                      className={cn(
-                        'flex items-center gap-2 rounded px-2 py-1.5 cursor-pointer transition-colors',
-                        checked ? 'bg-nf-red/10' : 'hover:bg-nf-gray-500/30'
-                      )}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const next = checked
-                          ? field.value.filter((t: string) => t !== show.title)
-                          : [...field.value, show.title];
-                        field.onChange(next);
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        readOnly
-                        className="h-4 w-4 rounded border-nf-gray-400 text-nf-red focus:ring-nf-red focus:ring-offset-0 bg-nf-gray-500 pointer-events-none"
-                      />
-                      <span className="text-sm text-white">{show.title}</span>
-                      {show.recommendedAge > 0 && (
-                        <span className="ml-auto text-xs text-nf-gray-300">{show.recommendedAge}+</span>
-                      )}
-                    </label>
-                  );
-                })
+            <div className="rounded-lg border border-nf-gray-400/55 bg-nf-surface overflow-hidden">
+              {/* Search filter */}
+              {shows.length > 4 && (
+                <div className="relative border-b border-nf-gray-400/30 px-2 py-1.5">
+                  <Search className="absolute left-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-nf-gray-300" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Buscar show..."
+                    className="w-full bg-transparent py-1 pl-6 pr-2 text-sm text-white placeholder:text-nf-gray-300 focus:outline-none"
+                  />
+                </div>
               )}
+
+              {/* Shows list */}
+              <div className="max-h-56 overflow-y-auto overscroll-contain p-1 sm:max-h-60 sm:p-1.5">
+                {shows.length === 0 ? (
+                  <p className="p-3 text-xs text-nf-gray-300">Nenhum TV Show disponível. Crie um primeiro.</p>
+                ) : filteredShows.length === 0 ? (
+                  <p className="p-3 text-xs text-nf-gray-300">Nenhum resultado para &ldquo;{searchQuery}&rdquo;</p>
+                ) : (
+                  filteredShows.map((show) => {
+                    const checked = field.value.includes(show.title);
+                    const thumbnailUrl = show.posterUrl || show.backdropUrl;
+
+                    return (
+                      <button
+                        type="button"
+                        key={show.title}
+                        className={cn(
+                          'flex w-full items-center gap-3 rounded-md px-2 py-2 sm:py-1.5 text-left transition-colors',
+                          checked
+                            ? 'bg-nf-red/10'
+                            : 'hover:bg-nf-gray-500/30'
+                        )}
+                        onClick={() => {
+                          const next = checked
+                            ? field.value.filter((t: string) => t !== show.title)
+                            : [...field.value, show.title];
+                          field.onChange(next);
+                        }}
+                      >
+                        {/* Custom checkbox */}
+                        <span className={cn(
+                          'flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-all duration-150',
+                          checked
+                            ? 'border-nf-red bg-nf-red text-white'
+                            : 'border-nf-gray-400 bg-nf-gray-500'
+                        )}>
+                          {checked && <Check className="h-3 w-3" strokeWidth={3} />}
+                        </span>
+
+                        {/* Show thumbnail */}
+                        <div className="relative h-9 w-6 shrink-0 overflow-hidden rounded-sm bg-nf-gray-500">
+                          {thumbnailUrl ? (
+                            <Image
+                              src={thumbnailUrl}
+                              alt=""
+                              fill
+                              className="object-cover"
+                              sizes="24px"
+                            />
+                          ) : (
+                            <div
+                              className="absolute inset-0 flex items-center justify-center"
+                              style={{ backgroundImage: titleToGradient(show.title) }}
+                            >
+                              <span className="text-[8px] font-bold text-white/40">{show.title.charAt(0)}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Show info */}
+                        <span className="min-w-0 flex-1 truncate text-sm text-white">{show.title}</span>
+
+                        <AgeBadge age={show.recommendedAge} className="shrink-0" />
+                      </button>
+                    );
+                  })
+                )}
+              </div>
             </div>
           )}
         />
       </div>
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className="mt-2 flex justify-end gap-3 border-t border-nf-gray-400/30 pt-4">
         <Button type="button" variant="netflixOutline" onClick={onCancel}>
           Cancelar
         </Button>

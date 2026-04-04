@@ -6,12 +6,12 @@ import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import type { TvShow } from '@/lib/api';
 import { useTvShows, useCreateTvShow, useUpdateTvShow, useDeleteTvShow } from '@/lib/hooks/use-tvshows';
+import { useWatchlistLookup } from '@/lib/hooks/use-watchlist';
 import { TvShowForm } from './tvshow-form';
 import { LoadingPage } from '@/components/states/loading-card';
 import { EmptyState } from '@/components/states/empty-state';
 import { ErrorState } from '@/components/states/error-state';
 import { Button } from '@/components/ui/button';
-
 import { HeroBanner } from '@/components/layout/hero-banner';
 import { CarouselRow } from '@/components/layout/carousel-row';
 import { TvShowThumbnail } from '@/components/tvshows/tvshow-thumbnail';
@@ -20,10 +20,13 @@ import { ShowDetailModal } from '@/components/tvshows/show-detail-modal';
 
 type FormMode = { type: 'closed' } | { type: 'create' } | { type: 'edit'; show: TvShow };
 
+const HOME_ROW_LIMIT = 16;
+
 export function TvShowsPage() {
   const [formMode, setFormMode] = useState<FormMode>({ type: 'closed' });
   const [confirmDelete, setConfirmDelete] = useState<TvShow | null>(null);
   const [detailShow, setDetailShow] = useState<TvShow | null>(null);
+  const [showAllRows, setShowAllRows] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const openCreate = () => setFormMode({ type: 'create' });
@@ -31,10 +34,11 @@ export function TvShowsPage() {
     return () => window.removeEventListener('open-create-show', openCreate);
   }, []);
 
-  const { data, isLoading, error, refetch } = useTvShows(100);
+  const { data, isLoading, error, refetch } = useTvShows(300);
   const createMutation = useCreateTvShow();
   const updateMutation = useUpdateTvShow();
   const deleteMutation = useDeleteTvShow();
+  const watchlistLookup = useWatchlistLookup();
 
   const shows = data?.result ?? [];
 
@@ -43,12 +47,7 @@ export function TvShowsPage() {
       onSuccess: () => {
         setFormMode({ type: 'closed' });
         toast.success('Show criado', { description: formData.title });
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#E50914', '#E5E5E5', '#FFD700'],
-        });
+        confetti({ particleCount: 90, spread: 60, origin: { y: 0.65 }, colors: ['#E50914', '#E5E5E5', '#FFD700'] });
       },
     });
   }
@@ -63,7 +62,6 @@ export function TvShowsPage() {
   }
 
   function handleDelete(show: TvShow) {
-    if (!show) return;
     deleteMutation.mutate(show.title, {
       onSuccess: () => {
         setConfirmDelete(null);
@@ -72,66 +70,49 @@ export function TvShowsPage() {
     });
   }
 
-  // Derived state
   const featuredShow = useMemo(() => {
     if (shows.length === 0) return null;
-    // Pseudo-random but stable: hash based on shows.length so it changes when list changes
     let hash = 0;
-    for (const s of shows) {
-      for (let i = 0; i < s.title.length; i++) {
-        hash = s.title.charCodeAt(i) + ((hash << 5) - hash);
+    for (const item of shows) {
+      for (let i = 0; i < item.title.length; i++) {
+        hash = item.title.charCodeAt(i) + ((hash << 5) - hash);
       }
     }
     return shows[Math.abs(hash) % shows.length];
   }, [shows]);
-  
+
   const recentShows = useMemo(() => {
     return [...shows]
       .sort((a, b) => new Date(b['@lastUpdated']).getTime() - new Date(a['@lastUpdated']).getTime())
-      .slice(0, 10);
+      .slice(0, 40);
   }, [shows]);
 
   const matureShows = useMemo(() => {
-    return shows.filter(s => s.recommendedAge >= 16);
+    return shows.filter((show) => show.recommendedAge >= 16).slice(0, 40);
   }, [shows]);
 
-  // Loading state
-  if (isLoading) {
-    return <LoadingPage />;
-  }
+  const allShowsForHome = useMemo(() => shows.slice(0, 40), [shows]);
 
-  // Error state
+  if (isLoading) return <LoadingPage />;
+
   if (error) {
     return (
-      <div className="min-h-screen pt-24 px-4 md:px-12">
-        <ErrorState
-          title="Falha ao carregar TV Shows"
-          message={error.message}
-          onRetry={() => refetch()}
-        />
+      <div className="min-h-screen px-4 pt-40 md:px-12">
+        <ErrorState title="Falha ao carregar TV Shows" message={error.message} onRetry={() => refetch()} />
       </div>
     );
   }
 
-  // Empty state
   if (shows.length === 0) {
     return (
-      <div className="min-h-screen pt-24 px-4 md:px-12">
-        <EmptyState
-          title="Nenhum TV Show"
-          description="Comece adicionando seu primeiro show."
-        >
+      <div className="min-h-screen px-4 pt-40 md:px-12">
+        <EmptyState title="Nenhum TV Show" description="Comece adicionando seu primeiro show.">
           <Button variant="netflix" onClick={() => setFormMode({ type: 'create' })}>
-            <Plus className="h-4 w-4 mr-1" /> Novo Show
+            <Plus className="mr-1 h-4 w-4" /> Novo Show
           </Button>
         </EmptyState>
 
-        {/* Modal: Create */}
-        <Modal 
-          open={formMode.type !== 'closed'} 
-          onClose={() => setFormMode({ type: 'closed' })} 
-          title="Novo TV Show"
-        >
+        <Modal open={formMode.type !== 'closed'} onClose={() => setFormMode({ type: 'closed' })} title="Novo TV Show" size="lg">
           <TvShowForm
             onSubmit={handleCreate}
             onCancel={() => setFormMode({ type: 'closed' })}
@@ -143,69 +124,90 @@ export function TvShowsPage() {
     );
   }
 
-  // Main UI
+  function resolveRowItems(rowKey: string, items: TvShow[]) {
+    return showAllRows[rowKey] ? items : items.slice(0, HOME_ROW_LIMIT);
+  }
+
+  function resolveRowActionLabel(rowKey: string, totalCount: number) {
+    const isExpanded = Boolean(showAllRows[rowKey]);
+    if (isExpanded) return 'Mostrar menos';
+    if (totalCount <= HOME_ROW_LIMIT) return undefined;
+    return `Ver todos (${totalCount})`;
+  }
+
   return (
-    <div className="min-h-screen pb-24 relative overflow-x-clip">
-      {/* Hero */}
-      {featuredShow && (
+    <div className="relative min-h-screen overflow-x-clip pb-24">
+      {featuredShow ? (
         <HeroBanner
           show={featuredShow}
-          onEdit={(s) => setFormMode({ type: 'edit', show: s })}
-          onMoreInfo={(s) => setDetailShow(s)}
+          onEdit={(show) => setFormMode({ type: 'edit', show })}
+          onMoreInfo={(show) => setDetailShow(show)}
+          isInWatchlist={watchlistLookup.isInWatchlist(featuredShow.title)}
+          onToggleWatchlist={() => watchlistLookup.toggleShow(featuredShow.title)}
         />
-      )}
+      ) : null}
 
-      {/* Content area — overlaps hero bottom */}
-      <div className="-mt-16 relative z-10" data-content-area>
-        {/* Row: Todos os Shows */}
-        <CarouselRow title="Todos os Shows">
-          {shows.map(show => (
-            <TvShowThumbnail 
-              key={show['@key']} 
-              show={show} 
-              onEdit={(s) => setFormMode({ type: 'edit', show: s })} 
-              onDelete={(s) => setConfirmDelete(s)}
-              onMoreInfo={(s) => setDetailShow(s)}
+      <div className="relative z-10 -mt-6 md:-mt-16">
+        <CarouselRow
+          title="Todos os Shows"
+          actionLabel={resolveRowActionLabel('all', allShowsForHome.length)}
+          onAction={() => setShowAllRows((prev) => ({ ...prev, all: !prev.all }))}
+        >
+          {resolveRowItems('all', allShowsForHome).map((show) => (
+            <TvShowThumbnail
+              key={show['@key']}
+              show={show}
+              onEdit={(item) => setFormMode({ type: 'edit', show: item })}
+              onDelete={(item) => setConfirmDelete(item)}
+              onMoreInfo={(item) => setDetailShow(item)}
+              isInWatchlist={watchlistLookup.isInWatchlist(show.title)}
+              onToggleWatchlist={() => watchlistLookup.toggleShow(show.title)}
             />
           ))}
         </CarouselRow>
 
-        {/* Row: Atualizados Recentemente */}
-        {recentShows.length > 0 && (
-          <CarouselRow title="Atualizados Recentemente">
-            {recentShows.map(show => (
-              <TvShowThumbnail 
-                key={show['@key']} 
-                show={show} 
-                onEdit={(s) => setFormMode({ type: 'edit', show: s })} 
-                onDelete={(s) => setConfirmDelete(s)}
-                onMoreInfo={(s) => setDetailShow(s)}
-              />
-            ))}
-          </CarouselRow>
-        )}
-
-        {/* Row: Maduros 16+ */}
-        {matureShows.length > 0 && (
-          <CarouselRow title="Para Maiores de 16">
-            {matureShows.map(show => (
+        {recentShows.length > 0 ? (
+          <CarouselRow
+            title="Atualizados Recentemente"
+            actionLabel={resolveRowActionLabel('recent', recentShows.length)}
+            onAction={() => setShowAllRows((prev) => ({ ...prev, recent: !prev.recent }))}
+          >
+            {resolveRowItems('recent', recentShows).map((show) => (
               <TvShowThumbnail
                 key={show['@key']}
                 show={show}
-                onEdit={(s) => setFormMode({ type: 'edit', show: s })}
-                onDelete={(s) => setConfirmDelete(s)}
-                onMoreInfo={(s) => setDetailShow(s)}
+                onEdit={(item) => setFormMode({ type: 'edit', show: item })}
+                onDelete={(item) => setConfirmDelete(item)}
+                onMoreInfo={(item) => setDetailShow(item)}
               />
             ))}
           </CarouselRow>
-        )}
+        ) : null}
+
+        {matureShows.length > 0 ? (
+          <CarouselRow
+            title="Para Maiores de 16"
+            actionLabel={resolveRowActionLabel('mature', matureShows.length)}
+            onAction={() => setShowAllRows((prev) => ({ ...prev, mature: !prev.mature }))}
+          >
+            {resolveRowItems('mature', matureShows).map((show) => (
+              <TvShowThumbnail
+                key={show['@key']}
+                show={show}
+                onEdit={(item) => setFormMode({ type: 'edit', show: item })}
+                onDelete={(item) => setConfirmDelete(item)}
+                onMoreInfo={(item) => setDetailShow(item)}
+              />
+            ))}
+          </CarouselRow>
+        ) : null}
       </div>
 
-      {/* Modal: Create/Edit */}
-      <Modal 
-        open={formMode.type !== 'closed'} 
-        onClose={() => setFormMode({ type: 'closed' })} 
+      <Modal
+        open={formMode.type !== 'closed'}
+        onClose={() => setFormMode({ type: 'closed' })}
         title={formMode.type === 'create' ? 'Novo TV Show' : undefined}
+        size="lg"
       >
         <TvShowForm
           defaultValues={formMode.type === 'edit' ? formMode.show : undefined}
@@ -216,21 +218,12 @@ export function TvShowsPage() {
         />
       </Modal>
 
-      {/* Modal: Delete Confirmation */}
-      <Modal 
-        open={confirmDelete !== null} 
-        onClose={() => setConfirmDelete(null)} 
-        title="Confirmar Exclusão" 
-        size="sm"
-      >
-        <p className="text-nf-gray-200">
-          Tem certeza que deseja excluir <strong className="text-white">{confirmDelete?.title}</strong>?
+      <Modal open={confirmDelete !== null} onClose={() => setConfirmDelete(null)} title="Confirmar exclusão" size="sm">
+        <p className="text-sm text-nf-gray-100">
+          Excluir <strong className="text-white">{confirmDelete?.title}</strong>? Essa ação remove o show da base.
         </p>
-        <div className="flex gap-3 justify-end mt-6">
-          <Button
-            variant="netflixOutline"
-            onClick={() => setConfirmDelete(null)}
-          >
+        <div className="mt-8 flex justify-end gap-3 border-t border-nf-gray-400/30 pt-5">
+          <Button variant="netflixOutline" onClick={() => setConfirmDelete(null)}>
             Cancelar
           </Button>
           <Button
@@ -243,17 +236,24 @@ export function TvShowsPage() {
         </div>
       </Modal>
 
-      {/* Modal: Show Details */}
       <ShowDetailModal
         show={detailShow}
         onClose={() => setDetailShow(null)}
-        onEdit={(s) => { setDetailShow(null); setFormMode({ type: 'edit', show: s }); }}
-        onDelete={(s) => { setDetailShow(null); setConfirmDelete(s); }}
+        onEdit={(show) => {
+          setDetailShow(null);
+          setFormMode({ type: 'edit', show });
+        }}
+        onDelete={(show) => {
+          setDetailShow(null);
+          setConfirmDelete(show);
+        }}
+        isInWatchlist={detailShow ? watchlistLookup.isInWatchlist(detailShow.title) : false}
+        onToggleWatchlist={detailShow ? () => watchlistLookup.toggleShow(detailShow.title) : undefined}
       />
 
-      {/* FAB: Floating Action Button */}
       <button
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 hover:bg-nf-red-hover hover:scale-105 transition-all flex items-center justify-center cursor-pointer"
+        className="touch-target-exempt fixed bottom-6 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-nf-red text-white shadow-lg shadow-nf-red/30 transition-all hover:bg-nf-red-hover active:scale-95 md:hidden"
+        style={{ marginBottom: 'var(--safe-bottom)' }}
         onClick={() => setFormMode({ type: 'create' })}
         aria-label="Adicionar novo TV Show"
       >

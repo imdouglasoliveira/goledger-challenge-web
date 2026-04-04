@@ -48,12 +48,16 @@ export function isJunkTvShow(show: Record<string, unknown>): boolean {
 
 export function isJunkSeason(season: Record<string, unknown>): boolean {
   const tvShow = season.tvShow as { title?: string } | undefined;
-  return isJunkText(tvShow?.title ?? '');
+  const title = tvShow?.title;
+  if (!title) return false; // reference-only (no title) — not junk
+  return isJunkText(title);
 }
 
 export function isJunkEpisode(episode: Record<string, unknown>): boolean {
   const season = episode.season as { tvShow?: { title?: string } } | undefined;
-  return isJunkText(season?.tvShow?.title ?? '');
+  const title = season?.tvShow?.title;
+  if (!title) return false; // reference-only (no title) — not junk
+  return isJunkText(title);
 }
 
 export function isJunkWatchlist(wl: Record<string, unknown>): boolean {

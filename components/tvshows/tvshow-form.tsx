@@ -1,6 +1,8 @@
 'use client';
 
 import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Lock } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -16,11 +18,27 @@ const AGE_OPTIONS = [
   { value: 18, label: '18+', active: 'bg-black border-white text-white' },
 ] as const;
 
-interface TvShowFormValues {
-  title: string;
-  description: string;
-  recommendedAge?: number;
-}
+const tvShowSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, 'Título é obrigatório')
+    .min(2, 'Título deve ter no mínimo 2 caracteres')
+    .max(200, 'Título deve ter no máximo 200 caracteres'),
+  description: z
+    .string()
+    .trim()
+    .min(1, 'Descrição é obrigatória')
+    .min(10, 'Descrição deve ter no mínimo 10 caracteres')
+    .max(2000, 'Descrição deve ter no máximo 2000 caracteres'),
+  recommendedAge: z
+    .number({ error: 'Selecione uma classificação' })
+    .int()
+    .min(0)
+    .max(18),
+});
+
+type TvShowFormValues = z.infer<typeof tvShowSchema>;
 
 interface TvShowFormData {
   title: string;
@@ -46,6 +64,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
     watch,
     formState: { errors },
   } = useForm<TvShowFormValues>({
+    resolver: zodResolver(tvShowSchema),
     defaultValues: {
       title: defaultValues?.title ?? '',
       description: defaultValues?.description ?? '',
@@ -59,9 +78,9 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
 
   const submitHandler = handleSubmit((data) => {
     onSubmit({
-      title: data.title.trim(),
-      description: data.description.trim(),
-      recommendedAge: Number(data.recommendedAge),
+      title: data.title,
+      description: data.description,
+      recommendedAge: data.recommendedAge,
     });
   });
 
@@ -70,8 +89,8 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
   return (
     <form onSubmit={submitHandler} className="space-y-5">
       {hasHeroImage && (
-        <div className="-mx-6 -mt-6 mb-1">
-          <div className="relative h-64 w-full overflow-hidden">
+        <div className="-mx-4 -mt-4 sm:-mx-6 sm:-mt-5 mb-1">
+          <div className="relative h-56 sm:h-80 w-full overflow-hidden">
             <Image
               src={imageUrl}
               alt={defaultValues?.title ?? ''}
@@ -79,15 +98,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
               className={cn('object-cover', isPosterOnly && 'object-top')}
               sizes="(max-width: 768px) 100vw, 500px"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-nf-card from-5% via-nf-card/60 via-40% to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 px-6 pb-4">
-              <h3
-                className="text-xl font-bold text-white leading-tight"
-                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}
-              >
-                {defaultValues?.title}
-              </h3>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-nf-card from-0% via-nf-card/40 via-30% to-transparent" />
             <input type="hidden" {...register('title')} />
           </div>
         </div>
@@ -121,19 +132,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
           <Input
             id="title"
             aria-label="titulo título"
-            {...register('title', {
-              required: 'Título é obrigatório',
-              setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-              validate: (value) => {
-                if (typeof value !== 'string' || value.length < 2) {
-                  return 'Título deve ter no mínimo 2 caracteres';
-                }
-                if (value.length > 200) {
-                  return 'Título deve ter no máximo 200 caracteres';
-                }
-                return true;
-              },
-            })}
+            {...register('title')}
             placeholder="Ex: Breaking Bad, Stranger Things"
           />
           {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>}
@@ -157,22 +156,10 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
         <textarea
           id="description"
           aria-label="descricao descrição"
-          {...register('description', {
-            required: 'Descrição é obrigatória',
-            setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-            validate: (value) => {
-              if (typeof value !== 'string' || value.length < 10) {
-                return 'Descrição deve ter no mínimo 10 caracteres';
-              }
-              if (value.length > DESC_MAX) {
-                return `Descrição deve ter no máximo ${DESC_MAX} caracteres`;
-              }
-              return true;
-            },
-          })}
+          {...register('description')}
           placeholder="Descreva o show em pelo menos 10 caracteres"
           rows={3}
-          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400 bg-nf-surface px-3 py-2 text-sm text-white placeholder:text-nf-gray-300 focus:border-white focus:outline-none focus:ring-1 focus:ring-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-200/75 focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red disabled:cursor-not-allowed disabled:opacity-50"
         />
         {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
       </div>
@@ -184,9 +171,8 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
         <Controller
           name="recommendedAge"
           control={control}
-          rules={{ required: 'Selecione uma classificação' }}
           render={({ field }) => (
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2">
               {AGE_OPTIONS.map((opt) => {
                 const selected = field.value === opt.value;
                 return (
@@ -196,10 +182,10 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
                     onClick={() => field.onChange(opt.value)}
                     aria-pressed={selected}
                     className={cn(
-                      'flex h-10 min-w-[3rem] items-center justify-center rounded-md border-2 px-3 text-sm font-bold transition-all duration-150 cursor-pointer',
+                      'flex h-11 sm:h-10 min-w-[3rem] items-center justify-center rounded-md border-2 px-3 text-sm font-bold transition-all duration-150 cursor-pointer touch-target-exempt',
                       selected
-                        ? `${opt.active} scale-110`
-                        : 'bg-transparent border-nf-gray-500 text-nf-gray-300 hover:border-nf-gray-300 hover:text-white'
+                        ? `${opt.active} scale-105 sm:scale-110`
+                        : 'bg-transparent border-nf-gray-500 text-nf-gray-300 hover:border-nf-gray-300 hover:text-white active:border-nf-gray-200'
                     )}
                   >
                     {opt.label}
@@ -212,7 +198,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
         {errors.recommendedAge && <p className="mt-1.5 text-sm text-red-500">{errors.recommendedAge.message}</p>}
       </fieldset>
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className="mt-2 flex justify-end gap-3 border-t border-nf-gray-400/30 pt-4">
         <Button type="button" variant="netflixOutline" onClick={onCancel}>
           Cancelar
         </Button>

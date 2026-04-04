@@ -2,12 +2,13 @@ import type { ComponentProps } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { TvShowThumbnail } from '@/components/tvshows/tvshow-thumbnail';
+import type { TvShow } from '@/lib/api';
 
 vi.mock('next/image', () => ({
   default: ({ alt = '', ...props }: ComponentProps<'img'>) => <img alt={alt} {...props} />,
 }));
 
-const mockShow = {
+const mockShow: TvShow = {
   '@key': 'test-key',
   '@assetType': 'tvShows',
   '@lastUpdated': '2026-01-01T00:00:00Z',
@@ -16,7 +17,7 @@ const mockShow = {
   recommendedAge: 14,
 };
 
-const mockShowWithPoster = {
+const mockShowWithPoster: TvShow = {
   ...mockShow,
   posterUrl: 'https://image.tmdb.org/t/p/w500/poster.jpg',
 };
@@ -35,7 +36,9 @@ describe('TvShowThumbnail', () => {
     render(
       <TvShowThumbnail show={mockShow} onEdit={onEdit} onDelete={vi.fn()} onMoreInfo={vi.fn()} />
     );
-    fireEvent.click(screen.getByLabelText('Editar show'));
+    // Both desktop and mobile cards render in jsdom; click any edit button
+    const editButtons = screen.getAllByLabelText('Editar show');
+    fireEvent.click(editButtons[0]);
     expect(onEdit).toHaveBeenCalledWith(mockShow);
   });
 
@@ -44,7 +47,8 @@ describe('TvShowThumbnail', () => {
     render(
       <TvShowThumbnail show={mockShow} onEdit={vi.fn()} onDelete={onDelete} onMoreInfo={vi.fn()} />
     );
-    fireEvent.click(screen.getByLabelText('Excluir show'));
+    const deleteButtons = screen.getAllByLabelText('Excluir show');
+    fireEvent.click(deleteButtons[0]);
     expect(onDelete).toHaveBeenCalledWith(mockShow);
   });
 
@@ -52,7 +56,8 @@ describe('TvShowThumbnail', () => {
     render(
       <TvShowThumbnail show={mockShow} onEdit={vi.fn()} onDelete={vi.fn()} onMoreInfo={vi.fn()} />
     );
-    expect(screen.getByText('14+')).toBeInTheDocument();
+    const badges = screen.getAllByText('14+');
+    expect(badges.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renderiza poster real quando posterUrl existe', () => {
@@ -60,7 +65,9 @@ describe('TvShowThumbnail', () => {
       <TvShowThumbnail show={mockShowWithPoster} onEdit={vi.fn()} onDelete={vi.fn()} onMoreInfo={vi.fn()} />
     );
 
-    expect(screen.getByAltText('Test Show')).toHaveAttribute('src', mockShowWithPoster.posterUrl);
+    const images = screen.getAllByAltText('Test Show');
+    expect(images.length).toBeGreaterThanOrEqual(1);
+    expect(images[0]).toHaveAttribute('src', mockShowWithPoster.posterUrl);
   });
 
   it('mantem watermark quando posterUrl nao existe', () => {
@@ -68,6 +75,7 @@ describe('TvShowThumbnail', () => {
       <TvShowThumbnail show={mockShow} onEdit={vi.fn()} onDelete={vi.fn()} onMoreInfo={vi.fn()} />
     );
 
-    expect(screen.getByText('T')).toBeInTheDocument();
+    const watermarks = screen.getAllByText('T');
+    expect(watermarks.length).toBeGreaterThanOrEqual(1);
   });
 });

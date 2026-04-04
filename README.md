@@ -1,52 +1,68 @@
-# GoLedger Challenge - TV Show Catalog
+# GoLedger Challenge — TV Show Catalog
 
-> [Leia em Portugues](README.pt-BR.md)
+> [Leia em Português](README.pt-BR.md)
 
-A Netflix-inspired web interface for cataloging TV Shows, Seasons, Episodes and Watchlists, powered by GoLedger's blockchain REST API.
+Web app for managing TV Shows, Seasons, Episodes, and Watchlists through GoLedger's blockchain REST API. The UI follows a Netflix-style dark theme with hero banners, carousels, and hover cards.
 
-Built with **Next.js 16**, **React 19**, **Fastify 5** (BFF), **TailwindCSS 4**, and **React Query**.
+**Stack:** Next.js 16 · React 19 · Fastify 5 (BFF) · TailwindCSS 4 · React Query 5 · React Hook Form + Zod · Vitest
 
-## Features
+## Screenshots
 
-- Full CRUD for **TV Shows**, **Seasons**, **Episodes**, and **Watchlists**
-- Netflix-style UI with carousel rows, hero banner, and hover cards
-- Backend-for-Frontend (BFF) with Fastify proxying requests to GoLedger API
-- Form validation with React Hook Form + Zod
-- TMDB image enrichment (posters and backdrops)
-- Toast notifications and confetti celebrations
-- Responsive design (mobile + desktop)
-- Comprehensive test suite (44 tests)
+### Home
 
-## Prerequisites
+The main page shows a hero banner with TMDB backdrop images and horizontal carousel rows for browsing shows.
 
-- **Node.js** 20+ (LTS recommended)
-- **pnpm** 10+ (`npm install -g pnpm`)
-- GoLedger API credentials (Basic Auth)
+![Home - TV Shows](public/images/01-home.png)
 
-## Getting Started
+### Show details
 
-### 1. Clone the repository
+Clicking a show opens a detail modal with edit/delete actions, seasons, and episodes.
+
+| Seasons | Episodes |
+|:---:|:---:|
+| ![Seasons in modal](public/images/01-home-mais-info-watchlist.png) | ![Episodes in modal](public/images/01-home-mais-info-episodes.png) |
+
+### Seasons
+
+Each show's seasons get their own page with hero banner and CRUD actions.
+
+![Seasons page](public/images/02-seasons.png)
+
+### Watchlist
+
+Users create lists, add shows to them, and browse by collection.
+
+| All lists | Inside a list |
+|:---:|:---:|
+| ![Watchlist](public/images/03-watchlist.png) | ![Watchlist detail](public/images/03-watchlist-detalhes.png) |
+
+## What it does
+
+- CRUD for four entities: TV Shows, Seasons, Episodes, Watchlists
+- BFF layer (Fastify) sits between the browser and GoLedger — credentials never reach the client
+- TMDB integration fetches poster and backdrop images automatically
+- Form validation with Zod schemas on both client and server
+- Toast notifications (Sonner) and confetti on creation
+- Mobile-first responsive layout
+- 44 tests (Vitest + React Testing Library)
+
+## Setup
+
+### 1. Clone and install
 
 ```bash
-git clone https://github.com/<your-user>/goledger-challenge-web.git
+git clone https://github.com/imdouglasoliveira/goledger-challenge-web.git
 cd goledger-challenge-web
-```
-
-### 2. Install dependencies
-
-```bash
 pnpm install
 ```
 
-### 3. Configure environment variables
-
-Copy the example file and fill in your credentials:
+### 2. Environment variables
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your GoLedger API credentials:
+Fill in your GoLedger credentials:
 
 ```env
 GOLEDGER_BASE_URL=http://ec2-50-19-36-138.compute-1.amazonaws.com
@@ -54,36 +70,28 @@ GOLEDGER_USERNAME=your-username
 GOLEDGER_PASSWORD=your-password
 ```
 
-Optionally, add a TMDB token for poster/backdrop images:
+For poster/backdrop images, add a TMDB token (optional):
 
 ```env
 TMDB_ACCESS_TOKEN=your-tmdb-access-token
 ```
 
-### 4. Run the development server
+### 3. Run
 
 ```bash
 pnpm dev
 ```
 
-This starts both the **Next.js frontend** (port 3000) and the **Fastify BFF** (port 3001) concurrently.
+Starts both the Next.js frontend (port 3000) and the Fastify BFF (port 3001). Open [http://localhost:3000](http://localhost:3000).
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### 5. Build for production
+### 4. Build and test
 
 ```bash
-pnpm build
-pnpm start
+pnpm build && pnpm start   # production build
+pnpm test                   # run test suite
 ```
 
-### 6. Run tests
-
-```bash
-pnpm test
-```
-
-## Project Structure
+## Project structure
 
 ```
 app/               Next.js App Router pages
@@ -91,7 +99,7 @@ app/               Next.js App Router pages
   ├── seasons/         Seasons page
   ├── episodes/        Episodes page
   └── watchlist/       Watchlist page
-components/        React components organized by feature
+components/        React components by feature
   ├── layout/          Header, HeroBanner, CarouselRow
   ├── tvshows/         TvShowThumbnail, TvShowForm, TvShowsPage
   ├── seasons/         SeasonCard, SeasonForm, SeasonsPage
@@ -99,28 +107,26 @@ components/        React components organized by feature
   ├── watchlist/       WatchlistCard, WatchlistForm, WatchlistPage
   ├── states/          Loading, Empty, Error states
   └── ui/              Button, Card, Input, Modal, Badge
-lib/               Shared utilities, API client, hooks
+lib/               API client, hooks, utilities
 src/               Fastify BFF server
-  ├── clients/         GoLedger blockchain client
-  ├── routes/          API endpoints (tvshows, seasons, episodes, watchlist)
+  ├── clients/         GoLedger API client
+  ├── routes/          REST endpoints
   ├── schemas/         Zod validation schemas
   ├── services/        Image cache, data filtering
-  └── plugins/         Security (CORS, Helmet, Rate Limiting), Swagger
-__tests__/         Component and integration tests
+  └── plugins/         CORS, Helmet, Rate Limiting, Swagger
+__tests__/         Component and API tests
 ```
 
-## API Architecture
+## Architecture
 
-The frontend does **not** call the GoLedger API directly. Instead, a Fastify BFF server handles authentication and proxies requests:
+The frontend never talks to GoLedger directly. A Fastify BFF handles auth, rate limiting, and image enrichment:
 
 ```
-Browser → Next.js (port 3000) → /api/* rewrites → Fastify BFF (port 3001) → GoLedger API
+Browser → Next.js (:3000) → /api/* rewrite → Fastify BFF (:3001) → GoLedger API
 ```
-
-This keeps credentials server-side and provides rate limiting, data filtering, and image enrichment.
 
 ## Security
 
-- API credentials are **never exposed** to the frontend
-- All mutations are rate-limited on the BFF
-- Environment variables are validated at startup
+- API credentials stay server-side — the browser only talks to the BFF
+- Rate limits on mutations: 30/min for create/update, 10/min for delete
+- Environment variables are validated at startup (missing vars = process exits)

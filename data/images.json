@@ -367,6 +367,310 @@
       "posterPath": null,
       "backdropPath": null,
       "confidence": 0
+    },
+    {
+      "title": "Invencível",
+      "tmdbId": 95557,
+      "tmdbName": "INVENCÍVEL",
+      "posterPath": "/qhb7RWU9ad9a5m3HbeRRXzjaMXf.jpg",
+      "backdropPath": "/dfmPbyeZZSz3bekeESvMJaH91gS.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Jujutsu Kaisen",
+      "tmdbId": 95479,
+      "tmdbName": "Jujutsu Kaisen",
+      "posterPath": "/8R1mMSC1gX1cg5ed7ns49JOEqw3.jpg",
+      "backdropPath": "/gmECX1DvFgdUPjtio2zaL8BPYPu.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Breaking bad",
+      "tmdbId": 1396,
+      "tmdbName": "Breaking Bad",
+      "posterPath": "/hGwm9Cj3CdbJIqQWNExQqiYmCd4.jpg",
+      "backdropPath": "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Vikings",
+      "tmdbId": 44217,
+      "tmdbName": "Vikings",
+      "posterPath": "/bQLrHIRNEkE3PdIWQrZHynQZazu.jpg",
+      "backdropPath": "/13kblIK8DnxMurcRDkeyy2sGR7v.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Ivan Jacques F1",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Hannibal",
+      "tmdbId": 40008,
+      "tmdbName": "Hannibal",
+      "posterPath": "/pbV2eLnKSIm1epSZt473UYfqaeZ.jpg",
+      "backdropPath": "/vlG182ZY2WMzD5bjFZNnhyvv5V4.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "IvanTeste2",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Demolidor",
+      "tmdbId": 202555,
+      "tmdbName": "Demolidor: Renascido",
+      "posterPath": "/r5hNFtkNAauxc2G4VUlnJOaVIb0.jpg",
+      "backdropPath": "/qrTAc0ZtQ859Qu5O8cixJzNJpQs.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "The Penguin",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "The Flash",
+      "tmdbId": 60735,
+      "tmdbName": "Flash",
+      "posterPath": "/lFxIoMKqkgTuxpghTPHBjoVstMV.jpg",
+      "backdropPath": "/gFkHcIh7iE5G0oVOgpmY8ONQjhl.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "The Boys",
+      "tmdbId": 76479,
+      "tmdbName": "The Boys",
+      "posterPath": "/in1R2dDc421JxsoRWaIIAqVI2KE.jpg",
+      "backdropPath": "/dKSLSL6R21YntEa7HDWR8HOoSMO.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Fleabag",
+      "tmdbId": 67070,
+      "tmdbName": "Fleabag",
+      "posterPath": "/27vEYsRKa3eAniwmoccOoluEXQ1.jpg",
+      "backdropPath": "/hXdQ4MWsEOX6qg6VydKrLb3YJ4g.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "O Mentalista",
+      "tmdbId": 5920,
+      "tmdbName": "O Mentalista",
+      "posterPath": "/d1ZcT5tHzUeQ7zgYecOVoWxH9FL.jpg",
+      "backdropPath": "/q3pCsNvJ7CmdJUz2sJEEUY3pOPC.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Watchmen",
+      "tmdbId": 79788,
+      "tmdbName": "Watchmen",
+      "posterPath": "/m8rWq3j73ZGhDuSCZWMMoE9ePH1.jpg",
+      "backdropPath": "/fh2CStc3fKFYhkKOFyUHBGksRWj.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "show vm 2",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "show vm",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Pokémon: Detetive Pikachu",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Suits",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Something Very Bad Is Going to Happen",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "testeabnso",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "vasco",
+      "tmdbId": 228701,
+      "tmdbName": "Vasco Rossi - Toda uma Vida",
+      "posterPath": "/wU7sm5dIQIJDflexsyoFFDHdj0G.jpg",
+      "backdropPath": "/742AO5PaFJYlLIo4ItCMACu8oEF.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "Testando impossivel de ter",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Wandinha",
+      "tmdbId": 119051,
+      "tmdbName": "Wandinha",
+      "posterPath": "/7rxiQrZjrer0RB9qNA8rHYFo53R.jpg",
+      "backdropPath": "/iHSwvRVsRyxpX7FE7GbviaDvgGZ.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Bleach",
+      "tmdbId": 30984,
+      "tmdbName": "Bleach",
+      "posterPath": "/e0kKmeM8R7Kersh5N2PPzIRNRhr.jpg",
+      "backdropPath": "/o0NsbcIvsllg6CJX0FBFY8wWbsn.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Fairy Tail",
+      "tmdbId": 46261,
+      "tmdbName": "Fairy Tail",
+      "posterPath": "/hUrw5HaW0h1KlmjGoyGE4HJM7Va.jpg",
+      "backdropPath": "/lT8CUfNOkBQW9oPda2T5UPzVquM.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "One Piece: A Série",
+      "tmdbId": 111110,
+      "tmdbName": "ONE PIECE: A Série",
+      "posterPath": "/aesLt9fsKSA6KCgGxA60VVxjtLk.jpg",
+      "backdropPath": "/qD211Hb5XwFxrszzBBe5EUYJerh.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Senhor dos Anéis (Trilogia)",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "testeeeee",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "The Pitt",
+      "tmdbId": 250307,
+      "tmdbName": "The Pitt",
+      "posterPath": "/kvFSpESyBZMjaeOJDx7RS3P1jey.jpg",
+      "backdropPath": "/q1z0W19F4T5Xs2qka3xJSmFjv9a.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Ted Lasso",
+      "tmdbId": 97546,
+      "tmdbName": "Ted Lasso",
+      "posterPath": "/5fhZdwP1DVJ0FyVH6vrFdHwpXIn.jpg",
+      "backdropPath": "/gEQkOMmnJcoh9Hh1vk7fpVYnksR.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "Brooklyn Nine-Nine",
+      "tmdbId": 48891,
+      "tmdbName": "Brooklyn Nine-Nine: Lei e Desordem",
+      "posterPath": "/A3SymGlOHefSKbz1bCOz56moupS.jpg",
+      "backdropPath": "/wyspZaGs7CXceV3Ct7NJhcKNDkn.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "Modern Family",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "Parks and Recreation",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "That '70s Show",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "The Good Place",
+      "tmdbId": 66573,
+      "tmdbName": "The Good Place",
+      "posterPath": "/qIhsuhoIYR5yTnDta0IL4senbeN.jpg",
+      "backdropPath": "/tZmlWeFEMvxrjJhBJJcLNXpSRiG.jpg",
+      "confidence": 1
+    },
+    {
+      "title": "The Marvelous Mrs. Maisel (A Maravilhosa Sra. Maisel)",
+      "tmdbId": 70796,
+      "tmdbName": "Maravilhosa Sra. Maisel",
+      "posterPath": "/i61vpsczXOfrDbkdyVHo6nSmVfQ.jpg",
+      "backdropPath": "/vQ77kC1amsZECKIxkUIsMJCtBVp.jpg",
+      "confidence": 0.8
+    },
+    {
+      "title": "Melhor chamar o Sal",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "M&L",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
     }
   ],
   "generatedAt": "2026-03-31T16:51:16.267Z",

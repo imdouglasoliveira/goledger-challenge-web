@@ -1,14 +1,17 @@
 @import 'tailwindcss';
 
+@custom-variant pointer-fine (@media (pointer: fine));
+@custom-variant pointer-coarse (@media (pointer: coarse));
+
 @theme {
   --color-nf-black: #141414;
   --color-nf-surface: #181818;
   --color-nf-card: #232323;
   --color-nf-red: #E50914;
   --color-nf-red-hover: #F6121D;
-  --color-nf-gray-100: #E5E5E5;
-  --color-nf-gray-200: #B3B3B3;
-  --color-nf-gray-300: #808080;
+  --color-nf-gray-100: #ECECEC;
+  --color-nf-gray-200: #CACACA;
+  --color-nf-gray-300: #A0A0A0;
   --color-nf-gray-400: #404040;
   --color-nf-gray-500: #2A2A2A;
 
@@ -34,16 +37,31 @@
   from { transform: translateX(-100%); }
   to { transform: translateX(100%); }
 }
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
 
 :root {
   --background: #141414;
   --foreground: #E5E5E5;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
 }
 
 ::-webkit-scrollbar {
@@ -67,5 +85,33 @@ body {
   }
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+  .safe-bottom {
+    padding-bottom: var(--safe-bottom);
+  }
+  .safe-top {
+    padding-top: var(--safe-top);
+  }
+}
+
+/* Mobile-specific: reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Touch devices: ensure proper touch targets */
+@media (pointer: coarse) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  /* Exception for inline/icon elements that have wrapper touch targets */
+  .touch-target-exempt {
+    min-height: unset;
+    min-width: unset;
   }
 }

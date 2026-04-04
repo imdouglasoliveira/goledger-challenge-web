@@ -1,7 +1,19 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import { Space_Grotesk } from 'next/font/google';
 import { Providers } from './providers';
 import { Header } from '@/components/layout/header';
 import './globals.css';
+
+const appFont = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
   title: 'GoLedger TV Shows',
@@ -15,10 +27,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-nf-black text-nf-gray-100 antialiased">
+      <body className={`${appFont.className} min-h-screen bg-nf-black text-nf-gray-100 antialiased`}>
         <Providers>
           <Header />
-          <main className="pt-16">{children}</main>
+          <main>{children}</main>
         </Providers>
       </body>
     </html>

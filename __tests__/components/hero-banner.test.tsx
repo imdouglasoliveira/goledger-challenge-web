@@ -2,12 +2,13 @@ import type { ComponentProps } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { HeroBanner } from '@/components/layout/hero-banner';
+import type { TvShow } from '@/lib/api';
 
 vi.mock('next/image', () => ({
   default: ({ alt = '', ...props }: ComponentProps<'img'>) => <img alt={alt} {...props} />,
 }));
 
-const mockShow = {
+const mockShow: TvShow = {
   '@key': 'tvShows:test-key',
   '@assetType': 'tvShows',
   '@lastUpdated': '2026-03-31T15:00:00Z',

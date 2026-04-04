@@ -16,8 +16,6 @@ Browser
 - `Next.js` para UX, shell e navegacao
 - `Fastify` para BFF, autenticacao e contrato interno
 - `Swagger/OpenAPI + Scalar` para documentar e testar a API interna
-- `Storybook` para design system aplicado
-
 ## Responsabilidades
 
 ### Next.js
@@ -26,7 +24,6 @@ Browser
 - paginas e layouts
 - experiencia do usuario
 - consumo da API interna
-- Storybook e design system
 
 ### Fastify
 

@@ -2,7 +2,7 @@
 
 - Data: 2026-03-30
 - Status: Proposta ativa
-- Stack alvo: Next.js + Fastify + Swagger + Scalar + Tailwind + shadcn/ui + Storybook
+- Stack alvo: Next.js + Fastify + Swagger + Scalar + Tailwind + shadcn/ui
 
 ## 1. Objetivo
 
@@ -54,39 +54,29 @@ Browser
 - Swagger/OpenAPI como contrato da API interna
 - Scalar como interface de navegacao e teste humano do contrato
 
-### Storybook
-
-- catalogar componentes `ui/` e componentes de dominio
-- validar estados de loading, empty, error e success
-- acelerar refinamento visual sem depender das telas completas
-
-## 5. Estrutura recomendada
+## 5. Estrutura do projeto
 
 ```text
-apps/
-  web/
-    app/
-    components/
-      ui/
-      layout/
-      domain/
-    features/
-    lib/
-    hooks/
-    types/
-    stories/
-  api/
-    src/
-      modules/
-        tv-shows/
-        seasons/
-        episodes/
-        watchlists/
-      clients/
-      plugins/
-      schemas/
-      utils/
-      routes/
+app/                    # Next.js App Router (layout, paginas)
+components/             # Componentes React organizados por dominio
+  tvshows/
+  seasons/
+  episodes/
+  watchlist/
+  ui/                   # Primitivos visuais (Button, Input, Badge, etc.)
+lib/                    # Hooks, API client, utilitarios
+  hooks/
+  api.ts
+  utils.ts
+src/                    # Fastify BFF
+  config/
+  clients/
+  routes/
+  schemas/
+  plugins/
+  services/
+  server.ts
+__tests__/              # Testes unitarios e de integracao
 ```
 
 ## 6. UI stack
@@ -139,6 +129,5 @@ Nao misturar bibliotecas com linguagem visual muito distinta no mesmo fluxo prin
 ## 10. Mitigacoes
 
 - limitar escopo do Fastify ao papel de BFF
-- usar Storybook para polir UI sem expandir infra
 - aprovar um pequeno set de libs complementares de UI
 - priorizar vertical slice de `tvShows` antes do resto
