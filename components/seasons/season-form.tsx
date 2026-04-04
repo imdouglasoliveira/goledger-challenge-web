@@ -1,16 +1,35 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import type { TvShow } from '@/lib/api';
 
-interface SeasonFormValues {
-  number: string;
-  tvShowTitle: string;
-  year: string;
-}
+const baseSeasonSchema = z.object({
+  number: z
+    .string()
+    .min(1, 'Número é obrigatório')
+    .refine((v) => parseInt(v, 10) >= 1, 'Número deve ser maior que 0'),
+  tvShowTitle: z
+    .string()
+    .min(1, 'Selecione um TV Show'),
+  year: z
+    .string()
+    .refine(
+      (v) => !v || (parseInt(v, 10) >= 1900 && parseInt(v, 10) <= 2100),
+      'Ano deve estar entre 1900 e 2100'
+    ),
+});
+
+const createSeasonSchema = baseSeasonSchema.refine(
+  (data) => data.year.length > 0,
+  { message: 'Ano é obrigatório', path: ['year'] }
+);
+
+type SeasonFormValues = z.infer<typeof baseSeasonSchema>;
 
 interface SeasonFormProps {
   defaultValues?: Partial<{
@@ -31,6 +50,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
     handleSubmit,
     formState: { errors },
   } = useForm<SeasonFormValues>({
+    resolver: zodResolver(isEdit ? baseSeasonSchema : createSeasonSchema),
     defaultValues: {
       number: defaultValues?.number?.toString() ?? '',
       tvShowTitle: defaultValues?.tvShow?.title ?? '',
@@ -54,7 +74,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
         </label>
         {isEdit ? (
           <>
-            <input type="hidden" {...register('tvShowTitle', { required: 'Selecione um TV Show' })} />
+            <input type="hidden" {...register('tvShowTitle')} />
             <select
               id="tvShowTitle"
               value={defaultValues?.tvShow?.title ?? ''}
@@ -70,7 +90,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
         ) : (
           <select
             id="tvShowTitle"
-            {...register('tvShowTitle', { required: 'Selecione um TV Show' })}
+            {...register('tvShowTitle')}
             className="w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-sm text-white focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red"
           >
             <option value="">Selecione...</option>
@@ -90,11 +110,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
         </label>
         {isEdit ? (
           <>
-            <input type="hidden" {...register('number', {
-              required: 'Número é obrigatório',
-              setValueAs: (v) => v.toString(),
-              min: { value: 1, message: 'Número deve ser maior que 0' },
-            })} />
+            <input type="hidden" {...register('number')} />
             <Input
               id="number"
               type="number"
@@ -108,11 +124,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
             id="number"
             type="number"
             min="1"
-            {...register('number', {
-              required: 'Número é obrigatório',
-              setValueAs: (v) => v.toString(),
-              min: { value: 1, message: 'Número deve ser maior que 0' },
-            })}
+            {...register('number')}
             placeholder="Ex: 1, 2, 3"
           />
         )}
@@ -131,12 +143,7 @@ export function SeasonForm({ defaultValues, shows, onSubmit, onCancel, isLoading
         <Input
           id="year"
           type="number"
-          {...register('year', {
-            required: isEdit ? false : 'Ano é obrigatório',
-            setValueAs: (v) => (v ? v.toString() : ''),
-            min: { value: 1900, message: 'Ano deve ser maior que 1900' },
-            max: { value: 2100, message: 'Ano deve ser menor que 2100' },
-          })}
+          {...register('year')}
           placeholder="Ex: 2024"
         />
         {errors.year && <p className="mt-1 text-sm text-red-500">{errors.year.message}</p>}

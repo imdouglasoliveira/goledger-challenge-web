@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Check, Search } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -10,11 +12,20 @@ import { AgeBadge } from '@/components/ui/badge';
 import { cn, titleToGradient } from '@/lib/utils';
 import type { TvShow, Watchlist } from '@/lib/api';
 
-interface WatchlistFormValues {
-  title: string;
-  description: string;
-  selectedShows: string[];
-}
+const watchlistSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(2, 'Título deve ter no mínimo 2 caracteres')
+    .max(200, 'Título deve ter no máximo 200 caracteres'),
+  description: z
+    .string()
+    .max(2000, 'Descrição deve ter no máximo 2000 caracteres')
+    .default(''),
+  selectedShows: z.array(z.string()).default([]),
+});
+
+type WatchlistFormValues = z.infer<typeof watchlistSchema>;
 
 interface WatchlistFormProps {
   defaultValues?: Partial<Watchlist>;
@@ -36,6 +47,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
     control,
     formState: { errors, dirtyFields },
   } = useForm<WatchlistFormValues>({
+    resolver: zodResolver(watchlistSchema),
     defaultValues: {
       title: defaultValues?.title ?? '',
       description: defaultValues?.description ?? '',
@@ -76,12 +88,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
         </label>
         {isEdit ? (
           <>
-            <input type="hidden" {...register('title', {
-              required: 'Título é obrigatório',
-              setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-              minLength: { value: 2, message: 'Título deve ter no mínimo 2 caracteres' },
-              maxLength: { value: 200, message: 'Título deve ter no máximo 200 caracteres' },
-            })} />
+            <input type="hidden" {...register('title')} />
             <Input
               id="title"
               value={defaultValues?.title ?? ''}
@@ -92,12 +99,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
         ) : (
           <Input
             id="title"
-            {...register('title', {
-              required: 'Título é obrigatório',
-              setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-              minLength: { value: 2, message: 'Título deve ter no mínimo 2 caracteres' },
-              maxLength: { value: 200, message: 'Título deve ter no máximo 200 caracteres' },
-            })}
+            {...register('title')}
             placeholder="Ex: Minha Lista, Para Assistir..."
           />
         )}
@@ -123,10 +125,7 @@ export function WatchlistForm({ defaultValues, shows, onSubmit, onCancel, isLoad
         </div>
         <textarea
           id="description"
-          {...register('description', {
-            setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-            maxLength: { value: DESC_MAX, message: `Descrição deve ter no máximo ${DESC_MAX} caracteres` },
-          })}
+          {...register('description')}
           placeholder="Descreva sua watchlist"
           rows={2}
           className="w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-200/75 focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red resize-y min-h-[60px] max-h-[200px] disabled:cursor-not-allowed disabled:opacity-50"

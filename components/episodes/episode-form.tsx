@@ -2,20 +2,40 @@
 
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import type { Episode, Season } from '@/lib/api';
 
-interface EpisodeFormValues {
-  tvShowTitle: string;
-  seasonKey: string;
-  episodeNumber: string;
-  title: string;
-  releaseDate: string;
-  description: string;
-  rating: string;
-}
+const episodeSchema = z.object({
+  tvShowTitle: z.string(),
+  seasonKey: z.string().min(1, 'Selecione uma temporada'),
+  episodeNumber: z
+    .string()
+    .min(1, 'Número é obrigatório')
+    .refine((v) => parseInt(v, 10) >= 1, 'Número deve ser maior que 0'),
+  title: z
+    .string()
+    .trim()
+    .min(2, 'Título deve ter no mínimo 2 caracteres')
+    .max(200, 'Título deve ter no máximo 200 caracteres'),
+  releaseDate: z.string().min(1, 'Data é obrigatória'),
+  description: z
+    .string()
+    .trim()
+    .min(10, 'Descrição deve ter no mínimo 10 caracteres')
+    .max(2000, 'Descrição deve ter no máximo 2000 caracteres'),
+  rating: z
+    .string()
+    .refine(
+      (v) => !v || (parseFloat(v) >= 0 && parseFloat(v) <= 10),
+      'Avaliação deve estar entre 0 e 10'
+    ),
+});
+
+type EpisodeFormValues = z.infer<typeof episodeSchema>;
 
 interface EpisodeFormProps {
   defaultValues?: Partial<Episode>;
@@ -43,6 +63,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
     setValue,
     formState: { errors },
   } = useForm<EpisodeFormValues>({
+    resolver: zodResolver(episodeSchema),
     defaultValues: {
       tvShowTitle: defaultValues?.season?.tvShow?.title ?? '',
       seasonKey: defaultValues?.season?.tvShow?.title ? `${defaultValues.season.tvShow.title}|${defaultValues.season.number}` : '',
@@ -112,7 +133,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         </label>
         {isEdit ? (
           <>
-            <input type="hidden" {...register('tvShowTitle', { required: 'Selecione um TV Show' })} />
+            <input type="hidden" {...register('tvShowTitle')} />
             <Input id="tvShowTitle" value={defaultValues?.season?.tvShow?.title ?? ''} disabled readOnly />
           </>
         ) : (
@@ -139,13 +160,13 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         </label>
         {isEdit ? (
           <>
-            <input type="hidden" {...register('seasonKey', { required: 'Selecione uma temporada' })} />
+            <input type="hidden" {...register('seasonKey')} />
             <Input id="seasonKey" value={`${defaultValues?.season?.tvShow?.title ?? ''} - Temporada ${defaultValues?.season?.number ?? ''}`} disabled readOnly />
           </>
         ) : (
           <select
             id="seasonKey"
-            {...register('seasonKey', { required: 'Selecione uma temporada' })}
+            {...register('seasonKey')}
             className={cn(
               'w-full rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-sm text-white focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red'
             )}
@@ -170,11 +191,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         </label>
         {isEdit ? (
           <>
-            <input type="hidden" {...register('episodeNumber', {
-              required: 'Número é obrigatório',
-              setValueAs: (value) => value.toString(),
-              min: { value: 1, message: 'Número deve ser maior que 0' },
-            })} />
+            <input type="hidden" {...register('episodeNumber')} />
             <Input id="episodeNumber" value={defaultValues?.episodeNumber?.toString() ?? ''} disabled readOnly />
           </>
         ) : (
@@ -182,11 +199,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
             id="episodeNumber"
             type="number"
             min="1"
-            {...register('episodeNumber', {
-              required: 'Número é obrigatório',
-              setValueAs: (value) => value.toString(),
-              min: { value: 1, message: 'Número deve ser maior que 0' },
-            })}
+            {...register('episodeNumber')}
             placeholder="Ex: 1, 2, 3"
           />
         )}
@@ -204,12 +217,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         </label>
         <Input
           id="title"
-          {...register('title', {
-            required: 'Título é obrigatório',
-            setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-            minLength: { value: 2, message: 'Título deve ter no mínimo 2 caracteres' },
-            maxLength: { value: 200, message: 'Título deve ter no máximo 200 caracteres' },
-          })}
+          {...register('title')}
           placeholder="Ex: Pilot, The One Where..."
         />
         {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>}
@@ -224,9 +232,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
           <Input
             id="releaseDate"
             type="date"
-            {...register('releaseDate', {
-              required: 'Data é obrigatória',
-            })}
+            {...register('releaseDate')}
           />
           {errors.releaseDate && <p className="mt-1 text-sm text-red-500">{errors.releaseDate.message}</p>}
         </div>
@@ -241,11 +247,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
             step="0.1"
             min="0"
             max="10"
-            {...register('rating', {
-              setValueAs: (value) => (value ? value.toString() : ''),
-              min: { value: 0, message: 'Avaliação deve ser maior ou igual a 0' },
-              max: { value: 10, message: 'Avaliação deve ser menor ou igual a 10' },
-            })}
+            {...register('rating')}
             placeholder="Ex: 8.5"
           />
           {errors.rating && <p className="mt-1 text-sm text-red-500">{errors.rating.message}</p>}
@@ -268,12 +270,7 @@ export function EpisodeForm({ defaultValues, seasons, onSubmit, onCancel, isLoad
         </div>
         <textarea
           id="description"
-          {...register('description', {
-            required: 'Descrição é obrigatória',
-            setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-            minLength: { value: 10, message: 'Descrição deve ter no mínimo 10 caracteres' },
-            maxLength: { value: DESC_MAX, message: `Descrição deve ter no máximo ${DESC_MAX} caracteres` },
-          })}
+          {...register('description')}
           placeholder="Descreva o episodio em pelo menos 10 caracteres"
           rows={3}
           className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-200/75 focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red disabled:cursor-not-allowed disabled:opacity-50"

@@ -1,6 +1,8 @@
 'use client';
 
 import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Lock } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -16,11 +18,27 @@ const AGE_OPTIONS = [
   { value: 18, label: '18+', active: 'bg-black border-white text-white' },
 ] as const;
 
-interface TvShowFormValues {
-  title: string;
-  description: string;
-  recommendedAge?: number;
-}
+const tvShowSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, 'Título é obrigatório')
+    .min(2, 'Título deve ter no mínimo 2 caracteres')
+    .max(200, 'Título deve ter no máximo 200 caracteres'),
+  description: z
+    .string()
+    .trim()
+    .min(1, 'Descrição é obrigatória')
+    .min(10, 'Descrição deve ter no mínimo 10 caracteres')
+    .max(2000, 'Descrição deve ter no máximo 2000 caracteres'),
+  recommendedAge: z
+    .number({ error: 'Selecione uma classificação' })
+    .int()
+    .min(0)
+    .max(18),
+});
+
+type TvShowFormValues = z.infer<typeof tvShowSchema>;
 
 interface TvShowFormData {
   title: string;
@@ -46,6 +64,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
     watch,
     formState: { errors },
   } = useForm<TvShowFormValues>({
+    resolver: zodResolver(tvShowSchema),
     defaultValues: {
       title: defaultValues?.title ?? '',
       description: defaultValues?.description ?? '',
@@ -59,9 +78,9 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
 
   const submitHandler = handleSubmit((data) => {
     onSubmit({
-      title: data.title.trim(),
-      description: data.description.trim(),
-      recommendedAge: Number(data.recommendedAge),
+      title: data.title,
+      description: data.description,
+      recommendedAge: data.recommendedAge,
     });
   });
 
@@ -113,19 +132,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
           <Input
             id="title"
             aria-label="titulo título"
-            {...register('title', {
-              required: 'Título é obrigatório',
-              setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-              validate: (value) => {
-                if (typeof value !== 'string' || value.length < 2) {
-                  return 'Título deve ter no mínimo 2 caracteres';
-                }
-                if (value.length > 200) {
-                  return 'Título deve ter no máximo 200 caracteres';
-                }
-                return true;
-              },
-            })}
+            {...register('title')}
             placeholder="Ex: Breaking Bad, Stranger Things"
           />
           {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>}
@@ -149,19 +156,7 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
         <textarea
           id="description"
           aria-label="descricao descrição"
-          {...register('description', {
-            required: 'Descrição é obrigatória',
-            setValueAs: (value) => (typeof value === 'string' ? value.trim() : value),
-            validate: (value) => {
-              if (typeof value !== 'string' || value.length < 10) {
-                return 'Descrição deve ter no mínimo 10 caracteres';
-              }
-              if (value.length > DESC_MAX) {
-                return `Descrição deve ter no máximo ${DESC_MAX} caracteres`;
-              }
-              return true;
-            },
-          })}
+          {...register('description')}
           placeholder="Descreva o show em pelo menos 10 caracteres"
           rows={3}
           className="min-h-[80px] w-full resize-y rounded-md border border-nf-gray-400/55 bg-nf-surface px-3 py-2 text-base sm:text-sm text-white placeholder:text-nf-gray-200/75 focus:border-nf-red focus:outline-none focus:ring-1 focus:ring-nf-red disabled:cursor-not-allowed disabled:opacity-50"
@@ -176,7 +171,6 @@ export function TvShowForm({ defaultValues, onSubmit, onCancel, isLoading, isEdi
         <Controller
           name="recommendedAge"
           control={control}
-          rules={{ required: 'Selecione uma classificação' }}
           render={({ field }) => (
             <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2">
               {AGE_OPTIONS.map((opt) => {

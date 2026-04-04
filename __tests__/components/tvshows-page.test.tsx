@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TvShowsPage } from '@/components/tvshows/tvshows-page';
 
@@ -9,6 +10,7 @@ const {
   useCreateTvShowMock,
   useUpdateTvShowMock,
   useDeleteTvShowMock,
+  useWatchlistLookupMock,
 } = vi.hoisted(() => ({
   toastSuccess: vi.fn(),
   confettiMock: vi.fn(),
@@ -16,6 +18,7 @@ const {
   useCreateTvShowMock: vi.fn(),
   useUpdateTvShowMock: vi.fn(),
   useDeleteTvShowMock: vi.fn(),
+  useWatchlistLookupMock: vi.fn(),
 }));
 
 vi.mock('sonner', () => ({
@@ -36,6 +39,10 @@ vi.mock('@/lib/hooks/use-tvshows', () => ({
   useDeleteTvShow: useDeleteTvShowMock,
 }));
 
+vi.mock('@/lib/hooks/use-watchlist', () => ({
+  useWatchlistLookup: useWatchlistLookupMock,
+}));
+
 const mockShow = {
   '@key': 'tvShows:test-key',
   '@assetType': 'tvShows',
@@ -45,6 +52,15 @@ const mockShow = {
   recommendedAge: 16,
 };
 
+function renderWithProviders(ui: React.ReactElement) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+  );
+}
+
 describe('TvShowsPage', () => {
   const createMutate = vi.fn();
   const updateMutate = vi.fn();
@@ -52,6 +68,12 @@ describe('TvShowsPage', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    useWatchlistLookupMock.mockReturnValue({
+      isInWatchlist: () => false,
+      toggleShow: vi.fn(),
+      isPending: false,
+    });
 
     useTvShowsMock.mockReturnValue({
       data: { result: [mockShow] },
@@ -77,7 +99,7 @@ describe('TvShowsPage', () => {
   });
 
   it('abre o modal de criacao pelo FAB', () => {
-    render(<TvShowsPage />);
+    renderWithProviders(<TvShowsPage />);
 
     fireEvent.click(screen.getByLabelText(/adicionar novo tv show/i));
 
@@ -89,7 +111,7 @@ describe('TvShowsPage', () => {
       callbacks?.onSuccess?.();
     });
 
-    render(<TvShowsPage />);
+    renderWithProviders(<TvShowsPage />);
 
     fireEvent.click(screen.getByLabelText(/adicionar novo tv show/i));
     fireEvent.change(screen.getByPlaceholderText(/breaking bad, stranger things/i), { target: { value: 'Dark' } });
@@ -123,7 +145,7 @@ describe('TvShowsPage', () => {
       callbacks?.onSuccess?.();
     });
 
-    render(<TvShowsPage />);
+    renderWithProviders(<TvShowsPage />);
 
     fireEvent.click(screen.getAllByLabelText(/excluir show/i)[0]);
     fireEvent.click(screen.getByRole('button', { name: /^excluir$/i }));
