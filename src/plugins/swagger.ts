@@ -18,6 +18,7 @@ export async function swaggerPlugin(server: FastifyInstance) {
         { name: 'seasons', description: 'CRUD de temporadas' },
         { name: 'episodes', description: 'CRUD de episodios' },
         { name: 'watchlist', description: 'CRUD de listas de exibicao' },
+        { name: 'cleanup', description: 'Limpeza de dados sujos/invalidos' },
       ],
     },
   });
