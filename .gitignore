@@ -19,6 +19,7 @@ logs/*
 *.png
 *.jpg
 *.jpeg
+!public/images/**
 
 # execution artifacts (completed — not needed in repo)
 docs/plans/

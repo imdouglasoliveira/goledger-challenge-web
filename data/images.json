@@ -655,6 +655,22 @@
       "posterPath": "/i61vpsczXOfrDbkdyVHo6nSmVfQ.jpg",
       "backdropPath": "/vQ77kC1amsZECKIxkUIsMJCtBVp.jpg",
       "confidence": 0.8
+    },
+    {
+      "title": "Melhor chamar o Sal",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
+    },
+    {
+      "title": "M&L",
+      "tmdbId": null,
+      "tmdbName": null,
+      "posterPath": null,
+      "backdropPath": null,
+      "confidence": 0
     }
   ],
   "generatedAt": "2026-03-31T16:51:16.267Z",
