@@ -7,7 +7,6 @@
     "@fastify/swagger": "^9.7.0",
     "@fastify/swagger-ui": "^5.2.5",
     "@hookform/resolvers": "^5.2.2",
-    "@imdouglasoliveira/a8z-framework": "^2.2.10",
     "@scalar/fastify-api-reference": "^1.49.7",
     "@tanstack/react-query": "^5.95.2",
     "canvas-confetti": "^1.9.4",
@@ -25,10 +24,6 @@
     "zod": "^4.3.6"
   },
   "scripts": {
-    "a8z:doctor": "pnpm exec a8z doctor",
-    "a8z:update": "pnpm dlx @imdouglasoliveira/a8z-framework@latest update",
-    "a8z:agents": "pnpm exec a8z agent",
-    "a8z:config": "pnpm exec a8z config",
     "dev": "node scripts/dev.mjs",
     "dev:frontend": "next dev --turbopack",
     "dev:api": "tsx watch src/server.ts",
